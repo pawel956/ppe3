@@ -12,4 +12,4 @@
 ---
 
 #### Introduction
-Dans le cadre des PPE, j'ai dû créer un programme en Java permettant de **créer** et de **gérer** un CV.
+Dans le cadre des PPE, j'ai créer un programme en Java permettant de **créer** et de **gérer** un CV.

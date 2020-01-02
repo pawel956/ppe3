@@ -18,6 +18,11 @@ public class Constants {
     public static final String NOM_UTILISATEUR = "";
     public static final String MDP_UTILISATEUR = "";
 
+    // enable or disable sign up via Google
+    public static final Boolean SIGN_UP_VIA_GOOGLE_IS_ENABLED = true;
+    // enable or disable sign up via Facebook
+    public static final Boolean SIGN_UP_VIA_FACEBOOK_IS_ENABLED = true;
+
     // Google constants
     public static final String CLIENT_ID = "";
     public static final String CLIENT_SECRET = "";

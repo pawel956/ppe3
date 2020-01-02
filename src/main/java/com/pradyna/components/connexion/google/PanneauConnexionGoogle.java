@@ -6,6 +6,10 @@
 package com.pradyna.components.connexion.google;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
+// constants
+import com.pradyna.constants.Constants;
 
 /**
  *
@@ -71,8 +75,15 @@ public class PanneauConnexionGoogle extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        GoogleOAuth2 google = new GoogleOAuth2();
-        this.setInformationsUtilisateur(google.getInformationsUtilisateur());
+        if (Constants.SIGN_UP_VIA_GOOGLE_IS_ENABLED) {
+            GoogleOAuth2 google = new GoogleOAuth2();
+            this.setInformationsUtilisateur(google.getInformationsUtilisateur());
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "La connexion via Google a été désactivée",
+                    "Connexion via Google",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

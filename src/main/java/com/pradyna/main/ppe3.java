@@ -16,7 +16,6 @@ import com.pradyna.components.importexport.ImportExportPDF;
 import com.pradyna.components.importexport.ImportExportXML;
 import com.pradyna.components.inscriptionv2.DialogFormInscriptionv2;
 import com.pradyna.components.modification.DialogFormModification;
-import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;

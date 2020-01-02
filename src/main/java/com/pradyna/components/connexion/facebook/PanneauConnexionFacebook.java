@@ -6,6 +6,10 @@
 package com.pradyna.components.connexion.facebook;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
+// constants
+import com.pradyna.constants.Constants;
 
 /**
  *
@@ -71,8 +75,15 @@ public class PanneauConnexionFacebook extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        FacebookOAuth2 facebook = new FacebookOAuth2();
-        this.setInformationsUtilisateur(facebook.getInformationsUtilisateur());
+        if (Constants.SIGN_UP_VIA_FACEBOOK_IS_ENABLED) {
+            FacebookOAuth2 facebook = new FacebookOAuth2();
+            this.setInformationsUtilisateur(facebook.getInformationsUtilisateur());
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "La connexion via Facebook a été désactivée",
+                    "Connexion via Facebook",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

@@ -8,7 +8,7 @@
 <img src="https://img.shields.io/badge/project-maven-red">
 </p>
 
-###  Projet personnel encadré n°3 - Création et gestion d'un ou des curriculum vitæ
+###  Projet personnel encadré n°3 - Création et gestion d'un ou plusieurs curriculum vitæ
 ---
 
 #### Introduction

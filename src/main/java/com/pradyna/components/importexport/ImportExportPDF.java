@@ -66,6 +66,9 @@ public class ImportExportPDF extends ImportExport {
                 Font f6 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 1);
                 f6.setColor(getRGBColor("#318CE7"));
                 selector.addFont(f6);
+                Font f7 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 25);
+                f7.setColor(getRGBColor("#A9A9A9"));
+                selector.addFont(f7);
 
 //                Image photo = Image.getInstance("https://kodejava.org/wp-content/uploads/2017/01/kodejava.png");
                 Image photo = Image.getInstance((byte[]) this.Utilisateur.get(0).get("photo"));
@@ -179,6 +182,7 @@ public class ImportExportPDF extends ImportExport {
                 para_Utilisateur.add(new Paragraph((String) this.Utilisateur.get(0).get("num_telephone"), f1));
                 para_Utilisateur.add(new Paragraph((String) this.Utilisateur.get(0).get("num_telephone_deux"), f1));
                 para_Utilisateur.add(new Paragraph((String) this.Utilisateur.get(0).get("site_web"), f1));
+                para_Utilisateur.add(new Paragraph((String) this.Cv.get(0).get("titre") + " " + (String) this.Cv.get(0).get("description"), f7));
 
                 cell_Utilisateur.addElement(para_Utilisateur);
 
@@ -287,8 +291,8 @@ public class ImportExportPDF extends ImportExport {
                 }
 
                 /**
-                 * Fin de rajout de toutes les cellules et tables secondaires dans la
-                 * table principale
+                 * Fin de rajout de toutes les cellules et tables secondaires
+                 * dans la table principale
                  */
                 Plein.addElement(Table2);
                 Table.addCell(Plein);

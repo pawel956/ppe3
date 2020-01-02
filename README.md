@@ -42,7 +42,7 @@ Avec ce logiciel on peut :
  - Avoir une application sur **Google** (et un compte client OAuth 2.0) et/ou **Facebook** pour utiliser leurs services (**facultatif**)
 
 #### Téléchargement du logiciel
-- 1ère méthode :  [cliquez-ici](https://github.com/pawel956/ppe3/archive/master.zip)  → aller dans le dossier des téléchargements → extraire le package du fichier .zip
+- 1ère méthode :  [cliquez-ici](https://github.com/pawel956/ppe3/archive/master.zip)  → aller dans le dossier des téléchargements → extraire le logiciel du fichier .zip
     
 - 2ème méthode : ouvrir Netbeans → aller dans l'onglet  `Team`  → puis aller dans  `Git`  → et enfin dans  `Clone`  → mettre ce lien :  [https://github.com/pawel956/ppe3.git]()  dans  `Repository URL`  → et cliquer sur  `Finish`
 

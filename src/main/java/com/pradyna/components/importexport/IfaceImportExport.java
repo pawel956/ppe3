@@ -13,6 +13,6 @@ public interface IfaceImportExport {
 
     public Boolean exporterFichier();
 
-    public Boolean importerFichier(String donneesAImporter);
+    public Boolean importerFichier();
 
 }

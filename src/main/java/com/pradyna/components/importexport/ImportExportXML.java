@@ -41,6 +41,11 @@ public class ImportExportXML extends ImportExport {
         this.id_cvs = id_cvs;
     }
 
+    public ImportExportXML(String cheminFichier, String donneesAImporter) {
+        this.cheminFichier = cheminFichier;
+        this.donneesAImporter = donneesAImporter;
+    }
+
     @Override
     public Boolean exporterFichier() {
         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -375,7 +380,7 @@ public class ImportExportXML extends ImportExport {
     }
 
     @Override
-    public Boolean importerFichier(String donneesAImporter) {
+    public Boolean importerFichier() {
         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
         if (this.cheminFichier != null) {
@@ -393,7 +398,8 @@ public class ImportExportXML extends ImportExport {
                     return null;
                 }
 
-                if (donneesAImporter.equals("Tout") || donneesAImporter.equals("Compte")) {
+                // comptes
+                if (this.donneesAImporter.equals("compte")) {
                     if (doc.getDocumentElement().getNodeName().equals("utilisateurs")) {
                         NodeList nList = doc.getElementsByTagName("utilisateur");
 
@@ -406,7 +412,7 @@ public class ImportExportXML extends ImportExport {
                                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                                     Element eElement = (Element) nNode;
                                     // utilisateur_1
-                                    
+
                                     if (eElement.getAttribute("id").equals("") || eElement.getElementsByTagName("identifiant").item(0) == null || eElement.getElementsByTagName("nom").item(0) == null || eElement.getElementsByTagName("prenom").item(0) == null || eElement.getElementsByTagName("dateNaissance").item(0) == null || eElement.getElementsByTagName("numeroRue").item(0) == null || eElement.getElementsByTagName("rue").item(0) == null || eElement.getElementsByTagName("infoComplementaire").item(0) == null || eElement.getElementsByTagName("codePostal").item(0) == null || eElement.getElementsByTagName("ville").item(0) == null || eElement.getElementsByTagName("pays").item(0) == null || eElement.getElementsByTagName("courriel").item(0) == null || eElement.getElementsByTagName("siteWeb").item(0) == null) {
                                         return null;
                                     }
@@ -449,7 +455,7 @@ public class ImportExportXML extends ImportExport {
                             return true;
                         }
                     }
-                    
+
                     return null;
                 }
             } catch (ParserConfigurationException | SAXException | IOException ex) {

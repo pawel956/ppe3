@@ -35,6 +35,11 @@ public class ImportExportCSV extends ImportExport {
         this.id_cvs = id_cvs;
     }
 
+    public ImportExportCSV(String cheminFichier, String donneesAImporter) {
+        this.cheminFichier = cheminFichier;
+        this.donneesAImporter = donneesAImporter;
+    }
+
     @Override
     public Boolean exporterFichier() {
         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -166,7 +171,7 @@ public class ImportExportCSV extends ImportExport {
     }
 
     @Override
-    public Boolean importerFichier(String donneesAImporter) {
+    public Boolean importerFichier() {
         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
 //        if (this.cheminFichier != null) {

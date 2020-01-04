@@ -10,7 +10,6 @@ import com.pradyna.components.importexport.ImportExportCSV;
 import com.pradyna.components.importexport.ImportExportJSON;
 import com.pradyna.components.PanneauInformationsCompte;
 import com.pradyna.components.Pays;
-import com.pradyna.components.Utilitaire;
 import com.pradyna.components.Ville;
 import com.pradyna.components.importexport.ImportExportXML;
 import com.pradyna.components.connexionmdp.DialogFormConnexionMdp;
@@ -20,8 +19,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JButton;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
@@ -461,95 +460,95 @@ public class PanneauFormModification extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButtonImporterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImporterActionPerformed
-//        cChoixFichier = new DialogChoixFichier(this);
-//        cChoixFichier.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-//        cChoixFichier.getPanneauChoixFichier().getjButtonValider().addMouseListener(new MouseListener() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//                if (cChoixFichier.getPanneauChoixFichier().getChoixFichierOK() && cChoixFichier.getPanneauChoixFichier().getFormatFichier() != null) {
-//                    cChoixFichier.setVisible(false);
-//                    cChoixFichier.dispose();
-//
-//                    String formatFichier = cChoixFichier.getPanneauChoixFichier().getFormatFichier();
-//                    String cheminFichier = cChoixFichier.getPanneauChoixFichier().getjTextFieldChemin().getText();
-//                    Boolean resultat = null;
-//                    String[][] etudiant = null;
-//
-//                    if (formatFichier.equals("json")) {
-//                        ImportExportJSON objJSON = new ImportExportJSON(cheminFichier, null);
-//                        resultat = objJSON.importerFichier();
-//                        if (resultat != null && resultat == true) {
-//                            etudiant = objJSON.getLesDonnees();
-//                        }
-//                    } else if (formatFichier.equals("xml")) {
-//                        ImportExportXML objXML = new ImportExportXML(cheminFichier, null);
-//                        resultat = objXML.importerFichier();
-//                        if (resultat != null && resultat == true) {
-//                            etudiant = objXML.getLesDonnees();
-//                        }
-//                    } else if (formatFichier.equals("csv")) {
-//                        ImportExportCSV objCSV = new ImportExportCSV(cheminFichier, null);
-//                        resultat = objCSV.importerFichier();
-//                        if (resultat != null && resultat == true) {
-//                            etudiant = objCSV.getLesDonnees();
-//                        }
-//                    }
-//                    if (resultat != null && resultat == true) {
-//                        if (etudiant != null && etudiant.length == 1) {
-//                            if (!etudiant[0][0].equals("") && !etudiant[0][1].equals("")) {
-//                                try {
-//                                    if (Integer.parseInt(etudiant[0][0]) == Utilisateur.getInstance().getId() && etudiant[0][1].equals(Utilisateur.getIdentifiant())) {
-//                                        updateAllJTextField(etudiant[0]);
-//                                        jLabelEtatExportationImportation.setForeground(Color.orange);
-//                                        jLabelEtatExportationImportation.setText("Importation réussie, veuillez confirmer pour mettre à jour les informations");
-//                                    } else {
-//                                        jLabelEtatExportationImportation.setForeground(Color.red);
-//                                        jLabelEtatExportationImportation.setText("Echec de l'importation, l'id et/ou l'identifiant ne correspondent pas au compte");
-//                                    }
-//                                } catch (NumberFormatException ex) {
-//                                    jLabelEtatExportationImportation.setForeground(Color.red);
-//                                    jLabelEtatExportationImportation.setText("Mauvais format pour l'id");
-//                                }
-//
-//                            } else {
-//                                jLabelEtatExportationImportation.setForeground(Color.red);
-//                                jLabelEtatExportationImportation.setText("Echec de l'importation, il manque l'id et/ou l'identifiant");
-//                            }
-//                        } else if (etudiant.length > 1) {
-//                            jLabelEtatExportationImportation.setForeground(Color.red);
-//                            jLabelEtatExportationImportation.setText("Echec de l'importation, vous tentez d'importer plusieurs comptes à la fois");
-//                        }
-//                    } else {
-//                        jLabelEtatExportationImportation.setForeground(Color.red);
-//                        jLabelEtatExportationImportation.setText("Echec de l'importation, mauvais format du fichier");
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void mousePressed(MouseEvent e) {
-//                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//            }
-//
-//            @Override
-//            public void mouseReleased(MouseEvent e) {
-//                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//            }
-//
-//            @Override
-//            public void mouseEntered(MouseEvent e) {
-//                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//            }
-//
-//            @Override
-//            public void mouseExited(MouseEvent e) {
-//                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//            }
-//        });
-//        cChoixFichier.setLocationRelativeTo(this);
-//        cChoixFichier.setModal(true);
-//        cChoixFichier.setVisible(true);
+        cChoixFichier = new DialogChoixFichier(this);
+        cChoixFichier.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        cChoixFichier.getPanneauChoixFichier().getjButtonValider().addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                if (cChoixFichier.getPanneauChoixFichier().getChoixFichierOK() && cChoixFichier.getPanneauChoixFichier().getFormatFichier() != null) {
+                    cChoixFichier.setVisible(false);
+                    cChoixFichier.dispose();
+
+                    String formatFichier = cChoixFichier.getPanneauChoixFichier().getFormatFichier();
+                    String cheminFichier = cChoixFichier.getPanneauChoixFichier().getjTextFieldChemin().getText();
+                    Boolean resultat = null;
+                    List<Map<String, Object>> compte = null;
+
+                    if (formatFichier.equals("json")) {
+                        ImportExportJSON objJSON = new ImportExportJSON(cheminFichier, "compte");
+                        resultat = objJSON.importerFichier();
+                        if (resultat != null && resultat == true) {
+                            compte = objJSON.getDonneesImporte_Utilisateur();
+                        }
+                    } else if (formatFichier.equals("xml")) {
+                        ImportExportXML objXML = new ImportExportXML(cheminFichier, "compte");
+                        resultat = objXML.importerFichier();
+                        if (resultat != null && resultat == true) {
+                            compte = objXML.getDonneesImporte_Utilisateur();
+                        }
+                    } else if (formatFichier.equals("csv")) {
+                        ImportExportCSV objCSV = new ImportExportCSV(cheminFichier, "compte");
+                        resultat = objCSV.importerFichier();
+                        if (resultat != null && resultat == true) {
+                            compte = objCSV.getDonneesImporte_Utilisateur();
+                        }
+                    }
+
+                    if (resultat != null && resultat == true) {
+                        if (compte != null && compte.size() == 1) {
+                            if (!((String) compte.get(0).get("id")).equals("") && !((String) compte.get(0).get("identifiant")).equals("")) {
+                                if (Integer.valueOf((String) compte.get(0).get("id")).equals(Utilisateur.getInstance().getId()) && ((String) compte.get(0).get("identifiant")).equals(Utilisateur.getIdentifiant())) {
+                                    updateAllJTextField(compte);
+                                    jLabelEtatExportationImportation.setForeground(Color.orange);
+                                    jLabelEtatExportationImportation.setText("Importation réussie, veuillez confirmer pour mettre à jour les informations");
+                                } else {
+                                    jLabelEtatExportationImportation.setForeground(Color.red);
+                                    jLabelEtatExportationImportation.setText("Echec de l'importation, l'id et/ou l'identifiant ne correspondent pas au compte");
+                                }
+                            } else {
+                                jLabelEtatExportationImportation.setForeground(Color.red);
+                                jLabelEtatExportationImportation.setText("Echec de l'importation, il manque l'id et/ou l'identifiant");
+                            }
+                        } else {
+                            if (compte != null && compte.size() > 1) {
+                                jLabelEtatExportationImportation.setForeground(Color.red);
+                                jLabelEtatExportationImportation.setText("Echec de l'importation, vous tentez d'importer plusieurs comptes à la fois");
+                            } else {
+                                jLabelEtatExportationImportation.setForeground(Color.red);
+                                jLabelEtatExportationImportation.setText("Echec de l'importation");
+                            }
+                        }
+                    } else {
+                        jLabelEtatExportationImportation.setForeground(Color.red);
+                        jLabelEtatExportationImportation.setText("Echec de l'importation, mauvais format du fichier");
+                    }
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+        cChoixFichier.setLocationRelativeTo(this);
+        cChoixFichier.setModal(true);
+        cChoixFichier.setVisible(true);
     }//GEN-LAST:event_jButtonImporterActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -719,20 +718,20 @@ public class PanneauFormModification extends javax.swing.JPanel {
         }
     }
 
-    public void updateAllJTextField(String[] information) {
-        getPanneauNom().getChamp2().setText(information[2]);
-        getPanneauPrenom().getChamp2().setText(information[3]);
-        getPanneauDateNaissance().getChamp2().setText(information[4]);
-        getPanneauInformationsCompte1().getPanneauNumeroRue().getChamp2().setText(information[5]);
-        getPanneauInformationsCompte1().getPanneauAdresse().getChamp2().setText(information[6]);
-        getPanneauInformationsCompte1().getPanneauInfoComp().getChamp2().setText(information[7]);
-        getPanneauInformationsCompte1().getPanneauCodePostal().getChamp2().setText(information[8]);
-        getPanneauInformationsCompte1().getPanneauVille().getChamp2().setText(information[9]);
-        getPanneauInformationsCompte1().getPanneauPays().getChamp2().setText(information[10]);
-        getPanneauCourriel().getChamp2().setText(information[11]);
-        getPanneauNumeroTelephone().getChamp2().setText(information[12]);
-        getPanneauInformationsCompte1().getPanneauNumeroTelephoneDeux().getChamp2().setText(information[13]);
-        getPanneauInformationsCompte1().getPanneauSiteWeb().getChamp2().setText(information[14]);
+    public void updateAllJTextField(List<Map<String, Object>> compte) {
+        getPanneauNom().getChamp2().setText((String) compte.get(0).get("nom"));
+        getPanneauPrenom().getChamp2().setText((String) compte.get(0).get("prenom"));
+        getPanneauDateNaissance().getChamp2().setText((String) compte.get(0).get("dateNaissance"));
+        getPanneauInformationsCompte1().getPanneauNumeroRue().getChamp2().setText((String) compte.get(0).get("numeroRue"));
+        getPanneauInformationsCompte1().getPanneauAdresse().getChamp2().setText((String) compte.get(0).get("rue"));
+        getPanneauInformationsCompte1().getPanneauInfoComp().getChamp2().setText((String) compte.get(0).get("infoComplementaire"));
+        getPanneauInformationsCompte1().getPanneauCodePostal().getChamp2().setText((String) compte.get(0).get("codePostal"));
+        getPanneauInformationsCompte1().getPanneauVille().getChamp2().setText((String) compte.get(0).get("ville"));
+        getPanneauInformationsCompte1().getPanneauPays().getChamp2().setText((String) compte.get(0).get("pays"));
+        getPanneauCourriel().getChamp2().setText((String) compte.get(0).get("courriel"));
+        getPanneauNumeroTelephone().getChamp2().setText((String) compte.get(0).get("numeroTelephoneUn"));
+        getPanneauInformationsCompte1().getPanneauNumeroTelephoneDeux().getChamp2().setText((String) compte.get(0).get("numeroTelephoneDeux"));
+        getPanneauInformationsCompte1().getPanneauSiteWeb().getChamp2().setText((String) compte.get(0).get("siteWeb"));
 
         updateAllJLabelEtat();
     }

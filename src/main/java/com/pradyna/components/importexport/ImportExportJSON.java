@@ -12,6 +12,8 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.pradyna.components.Utilitaire;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -27,6 +29,11 @@ public class ImportExportJSON extends ImportExport {
         this.cheminFichier = cheminFichier;
         this.id_utilisateurs = id_utilisateurs;
         this.id_cvs = id_cvs;
+    }
+
+    public ImportExportJSON(String cheminFichier, String donneesAImporter) {
+        this.cheminFichier = cheminFichier;
+        this.donneesAImporter = donneesAImporter;
     }
 
     @Override
@@ -216,71 +223,247 @@ public class ImportExportJSON extends ImportExport {
     }
 
     @Override
-    public Boolean importerFichier(String donneesAImporter) {
+    public Boolean importerFichier() {
         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
-//        if (this.cheminFichier != null) {
-//            String contenuFichier = Utilitaire.getFileString(this.cheminFichier);
-//
-//            if (contenuFichier != null) {
-//                JsonElement JsonElement;
-//                try {
-//                    JsonElement = JsonParser.parseString(contenuFichier);
-//                } catch (JsonSyntaxException ex) {
-//                    return null;
-//                }
-//
-//                if (JsonElement.isJsonArray()) {
-//                    JsonArray etudiants = JsonElement.getAsJsonArray();
-//
-//                    String[][] lesEtudiants = new String[etudiants.size()][15];
-//                    for (int i = 0; i < etudiants.size(); i++) {
-//                        JsonElement JsonElementBis = etudiants.get(i);
-//
-//                        if (JsonElementBis.isJsonObject()) {
-//                            JsonObject etudiant = JsonElementBis.getAsJsonObject();
-//
-//                            if (etudiant.get("id") == null || etudiant.get("identifiant") == null || etudiant.get("nom") == null || etudiant.get("prenom") == null || etudiant.get("dateNaissance") == null || etudiant.get("numeroRue") == null || etudiant.get("rue") == null || etudiant.get("infoComplementaire") == null || etudiant.get("codePostal") == null || etudiant.get("ville") == null || etudiant.get("pays") == null || etudiant.get("courriel") == null || etudiant.get("siteWeb") == null) {
-//                                return null;
-//                            }
-//
-//                            lesEtudiants[i][0] = etudiant.get("id").getAsString();
-//                            lesEtudiants[i][1] = etudiant.get("identifiant").getAsString();
-//                            lesEtudiants[i][2] = etudiant.get("nom").getAsString();
-//                            lesEtudiants[i][3] = etudiant.get("prenom").getAsString();
-//                            lesEtudiants[i][4] = etudiant.get("dateNaissance").getAsString();
-//                            lesEtudiants[i][5] = etudiant.get("numeroRue").getAsString();
-//                            lesEtudiants[i][6] = etudiant.get("rue").getAsString();
-//                            lesEtudiants[i][7] = etudiant.get("infoComplementaire").getAsString();
-//                            lesEtudiants[i][8] = etudiant.get("codePostal").getAsString();
-//                            lesEtudiants[i][9] = etudiant.get("ville").getAsString();
-//                            lesEtudiants[i][10] = etudiant.get("pays").getAsString();
-//                            lesEtudiants[i][11] = etudiant.get("courriel").getAsString();
-//
-//                            if (etudiant.get("numeroTelephone") != null && etudiant.get("numeroTelephone").isJsonObject()) {
-//                                JsonObject etudiantNumeroTelephone = etudiant.get("numeroTelephone").getAsJsonObject();
-//
-//                                if (etudiantNumeroTelephone.get("un") == null || etudiantNumeroTelephone.get("deux") == null) {
-//                                    return null;
-//                                }
-//                                lesEtudiants[i][12] = etudiantNumeroTelephone.get("un").getAsString();
-//                                lesEtudiants[i][13] = etudiantNumeroTelephone.get("deux").getAsString();
-//                            } else {
-//                                return null;
-//                            }
-//
-//                            lesEtudiants[i][14] = etudiant.get("siteWeb").getAsString();
-//                        } else {
-//                            return null;
-//                        }
-//                    }
-//
-//                    this.lesDonnees = lesEtudiants;
-//                    return true;
-//                }
-//            }
-//        }
-//
+        if (this.cheminFichier != null) {
+            String contenuFichier = Utilitaire.getFileString(this.cheminFichier);
+
+            if (contenuFichier != null) {
+                JsonElement JsonElement_racine;
+                try {
+                    JsonElement_racine = JsonParser.parseString(contenuFichier);
+                } catch (JsonSyntaxException ex) {
+                    return null;
+                }
+
+                if (JsonElement_racine.isJsonArray()) {
+                    JsonArray JsonArray_racine = JsonElement_racine.getAsJsonArray();
+
+                    JsonElement JsonElement_comptes = JsonArray_racine.get(0);
+                    JsonElement JsonElement_cvs = JsonArray_racine.get(1);
+
+                    // comptes
+                    if (this.donneesAImporter.equals("compte")) {
+                        if (JsonElement_comptes.isJsonArray()) {
+                            JsonArray JsonArray_comptes = JsonElement_comptes.getAsJsonArray();
+
+                            List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+
+                            for (int i = 0; i < JsonArray_comptes.size(); i++) {
+                                JsonElement JsonElement_compte = JsonArray_comptes.get(i);
+
+                                if (JsonElement_compte.isJsonObject()) {
+                                    JsonObject JsonObject_compte = JsonElement_compte.getAsJsonObject();
+
+                                    Map<String, Object> row = new HashMap<String, Object>(16);
+
+                                    if (JsonObject_compte.get("id") == null || JsonObject_compte.get("identifiant") == null || JsonObject_compte.get("nom") == null || JsonObject_compte.get("prenom") == null || JsonObject_compte.get("dateNaissance") == null || JsonObject_compte.get("numeroRue") == null || JsonObject_compte.get("rue") == null || JsonObject_compte.get("infoComplementaire") == null || JsonObject_compte.get("codePostal") == null || JsonObject_compte.get("ville") == null || JsonObject_compte.get("pays") == null || JsonObject_compte.get("courriel") == null || JsonObject_compte.get("siteWeb") == null) {
+                                        return null;
+                                    }
+
+                                    row.put("id", JsonObject_compte.get("id").getAsString());
+                                    row.put("identifiant", JsonObject_compte.get("identifiant").getAsString());
+                                    row.put("nom", JsonObject_compte.get("nom").getAsString());
+                                    row.put("prenom", JsonObject_compte.get("prenom").getAsString());
+                                    row.put("dateNaissance", JsonObject_compte.get("dateNaissance").getAsString());
+                                    row.put("numeroRue", JsonObject_compte.get("numeroRue").getAsString());
+                                    row.put("rue", JsonObject_compte.get("rue").getAsString());
+                                    row.put("infoComplementaire", JsonObject_compte.get("infoComplementaire").getAsString());
+                                    row.put("codePostal", JsonObject_compte.get("codePostal").getAsString());
+                                    row.put("ville", JsonObject_compte.get("ville").getAsString());
+                                    row.put("pays", JsonObject_compte.get("pays").getAsString());
+                                    row.put("courriel", JsonObject_compte.get("courriel").getAsString());
+
+                                    if (JsonObject_compte.get("numeroTelephone") != null && JsonObject_compte.get("numeroTelephone").isJsonObject()) {
+                                        JsonObject JsonObject_compte_numeroTelephone = JsonObject_compte.get("numeroTelephone").getAsJsonObject();
+
+                                        if (JsonObject_compte_numeroTelephone.get("un") == null || JsonObject_compte_numeroTelephone.get("deux") == null) {
+                                            return null;
+                                        }
+
+                                        row.put("numeroTelephoneUn", JsonObject_compte_numeroTelephone.get("un").getAsString());
+                                        row.put("numeroTelephoneDeux", JsonObject_compte_numeroTelephone.get("deux").getAsString());
+                                    } else {
+                                        return null;
+                                    }
+
+                                    row.put("siteWeb", JsonObject_compte.get("siteWeb").getAsString());
+
+                                    rows.add(row);
+                                }
+                            }
+
+                            this.DonneesImporte_Utilisateur = rows;
+                            return true;
+                        }
+                    }
+
+                    // cvs
+                    if (this.donneesAImporter.equals("cv")) {
+                        if (JsonElement_cvs.isJsonArray()) {
+                            JsonArray JsonArray_cvs = JsonElement_cvs.getAsJsonArray();
+
+                            List<Map<String, Object>> rows_cv = new ArrayList<Map<String, Object>>();
+                            List<Map<String, Object>> rows_experiences_pro = new ArrayList<Map<String, Object>>();
+                            List<Map<String, Object>> rows_formations = new ArrayList<Map<String, Object>>();
+                            List<Map<String, Object>> rows_informations_comp = new ArrayList<Map<String, Object>>();
+
+                            JsonElement JsonElement_cv = JsonArray_cvs.get(0);
+
+                            if (JsonElement_cv.isJsonObject()) {
+                                JsonObject JsonObject_cv = JsonElement_cv.getAsJsonObject();
+
+                                Map<String, Object> row_cv = new HashMap<String, Object>(7);
+                                Map<String, Object> row_experiences_pro = new HashMap<String, Object>(7);
+                                Map<String, Object> row_formations = new HashMap<String, Object>(7);
+                                Map<String, Object> row_informations_comp = new HashMap<String, Object>(4);
+
+                                if (JsonObject_cv.get("id") == null || JsonObject_cv.get("id_utilisateur") == null || JsonObject_cv.get("titre") == null || JsonObject_cv.get("description") == null) {
+                                    return null;
+                                }
+
+                                row_cv.put("id", JsonObject_cv.get("id").getAsString());
+                                row_cv.put("id_utilisateur", JsonObject_cv.get("id_utilisateur").getAsString());
+                                row_cv.put("titre", JsonObject_cv.get("titre").getAsString());
+                                row_cv.put("description", JsonObject_cv.get("description").getAsString());
+
+                                if (JsonObject_cv.get("maitrise") != null && JsonObject_cv.get("maitrise").isJsonObject()) {
+                                    JsonObject JsonObject_cv_maitrise = JsonObject_cv.get("maitrise").getAsJsonObject();
+
+                                    if (JsonObject_cv_maitrise.get("nom") == null || JsonObject_cv_maitrise.get("valeur") == null) {
+                                        return null;
+                                    }
+
+                                    row_cv.put("maitriseNom", JsonObject_cv_maitrise.get("nom").getAsString());
+                                    row_cv.put("maitriseValeur", JsonObject_cv_maitrise.get("valeur").getAsString());
+                                } else {
+                                    return null;
+                                }
+
+                                // experiences pro
+                                if (JsonObject_cv.get("experiences_pro") != null && JsonObject_cv.get("experiences_pro").isJsonObject()) {
+                                    JsonObject JsonObject_cv_experiences_pro = JsonObject_cv.get("experiences_pro").getAsJsonObject();
+
+                                    for (int j = 0; j < JsonObject_cv_experiences_pro.size(); j++) {
+                                        JsonElement JsonElement_cv_experience_pro = JsonObject_cv_experiences_pro.get("experience_pro_" + (j + 1));
+
+                                        if (JsonElement_cv_experience_pro.isJsonObject()) {
+                                            JsonObject JsonObject_cv_experience_pro = JsonElement_cv_experience_pro.getAsJsonObject();
+
+                                            if (JsonObject_cv_experience_pro.get("id") == null || JsonObject_cv_experience_pro.get("entreprise") == null || JsonObject_cv_experience_pro.get("lieu") == null || JsonObject_cv_experience_pro.get("description") == null) {
+                                                return null;
+                                            }
+
+                                            row_experiences_pro.put("id", JsonObject_cv_experience_pro.get("id").getAsString());
+                                            row_experiences_pro.put("entreprise", JsonObject_cv_experience_pro.get("entreprise").getAsString());
+                                            row_experiences_pro.put("lieu", JsonObject_cv_experience_pro.get("lieu").getAsString());
+                                            row_experiences_pro.put("description", JsonObject_cv_experience_pro.get("description").getAsString());
+
+                                            if (JsonObject_cv_experience_pro.get("annees") != null && JsonObject_cv_experience_pro.get("annees").isJsonObject()) {
+                                                JsonObject JsonObject_cv_experience_pro_annees = JsonObject_cv_experience_pro.get("annees").getAsJsonObject();
+
+                                                if (JsonObject_cv_experience_pro_annees.get("annee_debut") == null || JsonObject_cv_experience_pro_annees.get("annee_fin") == null) {
+                                                    return null;
+                                                }
+
+                                                row_experiences_pro.put("annee_debut", JsonObject_cv_experience_pro_annees.get("annee_debut").getAsString());
+                                                row_experiences_pro.put("annee_fin", JsonObject_cv_experience_pro_annees.get("annee_fin").getAsString());
+                                            } else {
+                                                return null;
+                                            }
+
+                                            rows_experiences_pro.add(row_experiences_pro);
+                                        } else {
+                                            return null;
+                                        }
+                                    }
+                                } else {
+                                    return null;
+                                }
+
+                                // formations
+                                if (JsonObject_cv.get("formations") != null && JsonObject_cv.get("formations").isJsonObject()) {
+                                    JsonObject JsonObject_cv_formations = JsonObject_cv.get("formations").getAsJsonObject();
+
+                                    for (int j = 0; j < JsonObject_cv_formations.size(); j++) {
+                                        JsonElement JsonElement_cv_formation = JsonObject_cv_formations.get("formation_" + (j + 1));
+
+                                        if (JsonElement_cv_formation.isJsonObject()) {
+                                            JsonObject JsonObject_cv_formation = JsonElement_cv_formation.getAsJsonObject();
+
+                                            if (JsonObject_cv_formation.get("id") == null || JsonObject_cv_formation.get("nom") == null || JsonObject_cv_formation.get("lieu") == null || JsonObject_cv_formation.get("description") == null) {
+                                                return null;
+                                            }
+
+                                            row_formations.put("id", JsonObject_cv_formation.get("id").getAsString());
+                                            row_formations.put("nom", JsonObject_cv_formation.get("nom").getAsString());
+                                            row_formations.put("lieu", JsonObject_cv_formation.get("lieu").getAsString());
+                                            row_formations.put("description", JsonObject_cv_formation.get("description").getAsString());
+
+                                            if (JsonObject_cv_formation.get("annees") != null && JsonObject_cv_formation.get("annees").isJsonObject()) {
+                                                JsonObject JsonObject_cv_formation_annees = JsonObject_cv_formation.get("annees").getAsJsonObject();
+
+                                                if (JsonObject_cv_formation_annees.get("annee_debut") == null || JsonObject_cv_formation_annees.get("annee_fin") == null) {
+                                                    return null;
+                                                }
+
+                                                row_formations.put("annee_debut", JsonObject_cv_formation_annees.get("annee_debut").getAsString());
+                                                row_formations.put("annee_fin", JsonObject_cv_formation_annees.get("annee_fin").getAsString());
+                                            } else {
+                                                return null;
+                                            }
+
+                                            rows_formations.add(row_formations);
+                                        } else {
+                                            return null;
+                                        }
+                                    }
+                                } else {
+                                    return null;
+                                }
+
+                                // informations_comp
+                                if (JsonObject_cv.get("informations_comp") != null && JsonObject_cv.get("informations_comp").isJsonObject()) {
+                                    JsonObject JsonObject_cv_informations_comp = JsonObject_cv.get("informations_comp").getAsJsonObject();
+
+                                    for (int j = 0; j < JsonObject_cv_informations_comp.size(); j++) {
+                                        JsonElement JsonElement_cv_informations_comp = JsonObject_cv_informations_comp.get("information_comp_" + (j + 1));
+
+                                        if (JsonElement_cv_informations_comp.isJsonObject()) {
+                                            JsonObject JsonObject_cv_information_comp = JsonElement_cv_informations_comp.getAsJsonObject();
+
+                                            if (JsonObject_cv_information_comp.get("id") == null || JsonObject_cv_information_comp.get("nom") == null || JsonObject_cv_information_comp.get("lieu") == null) {
+                                                return null;
+                                            }
+
+                                            row_informations_comp.put("id", JsonObject_cv_information_comp.get("id").getAsString());
+                                            row_informations_comp.put("intitule", JsonObject_cv_information_comp.get("intitule").getAsString());
+                                            row_informations_comp.put("description", JsonObject_cv_information_comp.get("description").getAsString());
+
+                                            rows_informations_comp.add(row_informations_comp);
+                                        } else {
+                                            return null;
+                                        }
+                                    }
+                                } else {
+                                    return null;
+                                }
+
+                                rows_cv.add(row_cv);
+                            }
+
+                            this.DonneesImporte_Cv = rows_cv;
+                            this.DonneesImporte_ExperiencePro = rows_experiences_pro;
+                            this.DonneesImporte_Formation = rows_formations;
+                            this.DonneesImporte_InformationsComp = rows_informations_comp;
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
         return null;
     }
 

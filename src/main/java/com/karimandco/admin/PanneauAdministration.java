@@ -172,7 +172,7 @@ public class PanneauAdministration extends javax.swing.JPanel {
         jButtonExporter.setBackground(new java.awt.Color(0, 0, 0));
         jButtonExporter.setFont(new java.awt.Font("Segoe UI Black", 0, 11)); // NOI18N
         jButtonExporter.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonExporter.setText("Exporter étudiants");
+        jButtonExporter.setText("Exporter utilisateur(s)");
         jButtonExporter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonExporterActionPerformed(evt);
@@ -182,7 +182,7 @@ public class PanneauAdministration extends javax.swing.JPanel {
         jButtonImporter.setBackground(new java.awt.Color(0, 0, 0));
         jButtonImporter.setFont(new java.awt.Font("Segoe UI Black", 0, 11)); // NOI18N
         jButtonImporter.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonImporter.setText("Importer étudiants");
+        jButtonImporter.setText("Importer utilisateur(s)");
         jButtonImporter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonImporterActionPerformed(evt);

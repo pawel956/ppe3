@@ -314,8 +314,10 @@ public class PanneauInformationsCompte extends javax.swing.JPanel {
                         Ville.setCode_postal(champ.getChamp2().getText());
                         Ville.getInstance().chargerInfoVille();
                         if (Ville.getInstance().getVilles() != null) {
-                            panneauVille.getChamp2().setText(Ville.getInstance().getVilles()[0]);
-                            updateJLabelEtat(panneauVille, 4);
+                            if (panneauVille.getChamp2().getText().equals("")) {
+                                panneauVille.getChamp2().setText(Ville.getInstance().getVilles()[0]);
+                                updateJLabelEtat(panneauVille, 4);
+                            }
                             resultat = true;
                             setCodePostalOK(true);
                         } else {

@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 public abstract class ImportExport implements IfaceImportExport {
 
     String cheminFichier;
+    String donneesAImporter;
 
     List<Integer> id_utilisateurs;
     List<Integer> id_cvs;
@@ -159,6 +160,26 @@ public abstract class ImportExport implements IfaceImportExport {
         }
 
         return null;
+    }
+
+    public List<Map<String, Object>> getDonneesImporte_Utilisateur() {
+        return DonneesImporte_Utilisateur;
+    }
+
+    public List<Map<String, Object>> getDonneesImporte_Cv() {
+        return DonneesImporte_Cv;
+    }
+
+    public List<Map<String, Object>> getDonneesImporte_Formation() {
+        return DonneesImporte_Formation;
+    }
+
+    public List<Map<String, Object>> getDonneesImporte_ExperiencePro() {
+        return DonneesImporte_ExperiencePro;
+    }
+
+    public List<Map<String, Object>> getDonneesImporte_InformationsComp() {
+        return DonneesImporte_InformationsComp;
     }
 
     // et les deux méthodes qui sont héritées de IfaceImportExport

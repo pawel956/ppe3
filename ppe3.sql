@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost
--- Généré le :  Jeu 02 Janvier 2020 à 20:24
+-- Généré le :  Dim 05 Janvier 2020 à 23:35
 -- Version du serveur :  5.5.58-0+deb8u1
 -- Version de PHP :  7.2.4-1+0~20180405085552.20+jessie~1.gbpbff9f0
 
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `num_rue` int(11) NOT NULL,
   `adresse` varchar(255) NOT NULL,
   `info_complementaire` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `villes` (
   `id_pays` int(11) NOT NULL,
   `code_postal` int(5) NOT NULL,
   `nom` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 --
 -- Index pour les tables exportées
@@ -209,12 +209,12 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 -- AUTO_INCREMENT pour la table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT pour la table `villes`
 --
 ALTER TABLE `villes`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
 --
 -- Contraintes pour les tables exportées
 --

@@ -6,10 +6,17 @@
 package com.karimandco.admin;
 
 import com.karimandco.auth.*;
+import com.karimandco.bdd.DaoSIO;
 import com.pradyna.components.PanneauInformationsCompte;
+import com.pradyna.components.Pays;
+import com.pradyna.components.Ville;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
@@ -53,7 +60,6 @@ public class PanneauFormModification extends javax.swing.JPanel {
         KeyListener(panneauDateNaissance, 5);
 
         panneauIdentifiant.getChamp2().setEditable(false);
-
     }
 
     public void setNomOK(Boolean nomOK) {
@@ -179,7 +185,7 @@ public class PanneauFormModification extends javax.swing.JPanel {
                         .addComponent(panneauNumeroTelephone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panneauDateNaissance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         jPanelInfoImpLayout.setVerticalGroup(
             jPanelInfoImpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,7 +211,7 @@ public class PanneauFormModification extends javax.swing.JPanel {
         jPanelInfoComp.setLayout(jPanelInfoCompLayout);
         jPanelInfoCompLayout.setHorizontalGroup(
             jPanelInfoCompLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 457, Short.MAX_VALUE)
+            .addGap(0, 474, Short.MAX_VALUE)
             .addGroup(jPanelInfoCompLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanelInfoCompLayout.createSequentialGroup()
                     .addContainerGap()
@@ -239,7 +245,7 @@ public class PanneauFormModification extends javax.swing.JPanel {
                             .addComponent(jLabelEtatMaj, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(0, 8, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -265,6 +271,59 @@ public class PanneauFormModification extends javax.swing.JPanel {
             this.setModificationOK(false);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    public Boolean updateBDD() {
+        try {
+            String[] date_split = this.panneauDateNaissance.getChamp2().getText().split("/");
+            String date_newFormat = date_split[2] + "-" + date_split[1] + "-" + date_split[0];
+
+            Integer id_pays = null;
+            ResultSet resultat_bdd_pays = DaoSIO.getInstance().requeteSelection("SELECT id FROM pays WHERE nom='" + Pays.getInstance().getPays()[0] + "'");
+            if (resultat_bdd_pays.next()) {
+                id_pays = resultat_bdd_pays.getInt("id");
+            } else {
+                DaoSIO.getInstance().requeteAction("INSERT INTO pays (nom) VALUES ('" + Pays.getInstance().getPays()[0] + "')");
+                ResultSet resultat_bdd_pays_bis = DaoSIO.getInstance().requeteSelection("SELECT id FROM pays WHERE nom='" + Pays.getInstance().getPays()[0] + "'");
+                if (resultat_bdd_pays_bis.next()) {
+                    id_pays = resultat_bdd_pays_bis.getInt("id");
+                }
+            }
+
+            Integer id_ville = null;
+            ResultSet resultat_bdd_ville = DaoSIO.getInstance().requeteSelection("SELECT id FROM villes WHERE id_pays='" + id_pays + "' AND code_postal='" + Ville.getCode_postal() + "' AND nom='" + Ville.getInstance().getVraiNomVille(this.panneauInformationsCompte1.getPanneauVille().getChamp2().getText()) + "'");
+            if (resultat_bdd_ville.next()) {
+                id_ville = resultat_bdd_ville.getInt("id");
+            } else {
+                Integer compteur = DaoSIO.getInstance().requeteAction("INSERT INTO villes (id_pays, code_postal, nom) VALUES (" + id_pays + ", " + Ville.getCode_postal() + ", '" + Ville.getInstance().getVraiNomVille(this.panneauInformationsCompte1.getPanneauVille().getChamp2().getText()) + "')");
+                if (compteur > 0) {
+                    ResultSet resultat_bdd_ville_bis = DaoSIO.getInstance().requeteSelection("SELECT id FROM villes WHERE id_pays='" + id_pays + "' AND code_postal='" + Ville.getCode_postal() + "' AND nom='" + Ville.getInstance().getVraiNomVille(this.panneauInformationsCompte1.getPanneauVille().getChamp2().getText()) + "'");
+                    if (resultat_bdd_ville_bis.next()) {
+                        id_ville = resultat_bdd_ville_bis.getInt("id");
+                    }
+                }
+            }
+
+            Integer req = DaoSIO.getInstance().requeteAction("UPDATE utilisateurs "
+                    + "SET nom = '" + panneauNom.getChamp2().getText() + "',"
+                    + "prenom = '" + panneauPrenom.getChamp2().getText() + "',"
+                    + "num_telephone = '" + panneauNumeroTelephone.getChamp2().getText() + "',"
+                    + "courriel = '" + panneauCourriel.getChamp2().getText() + "',"
+                    + "date_de_naissance = '" + date_newFormat + "',"
+                    + "num_telephone_deux = '" + panneauInformationsCompte1.getPanneauNumeroTelephoneDeux().getChamp2().getText() + "',"
+                    + "site_web = '" + panneauInformationsCompte1.getPanneauSiteWeb().getChamp2().getText() + "',"
+                    + "id_ville = '" + id_ville + "',"
+                    + "num_rue = '" + panneauInformationsCompte1.getPanneauNumeroRue().getChamp2().getText() + "',"
+                    + "adresse = '" + panneauInformationsCompte1.getPanneauAdresse().getChamp2().getText() + "',"
+                    + "info_complementaire = '" + panneauInformationsCompte1.getPanneauInfoComp().getChamp2().getText() + "' "
+                    + "WHERE identifiant = '" + panneauIdentifiant.getChamp2().getText() + "'");
+
+            return req > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(PanneauFormModification.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

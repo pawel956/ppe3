@@ -7,8 +7,10 @@ package com.pradyna.components.inscriptionv2;
 
 import com.karimandco.auth.*;
 import com.karimandco.bdd.DaoSIO;
+import com.pradyna.components.PanneauInformationsCompte;
 import com.pradyna.components.Pays;
 import com.pradyna.components.Ville;
+import com.pradyna.components.connexionmdp.PanneauMdp;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -20,6 +22,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 
 /**
  *
@@ -197,6 +200,30 @@ public class PanneauFormInscriptionv2 extends javax.swing.JPanel {
 
     public PanneauChamp getPanneauPrenom() {
         return panneauPrenom;
+    }
+
+    public JLabel getjLabel1() {
+        return jLabel1;
+    }
+
+    public PanneauMdp getPanneauMdp1() {
+        return panneauMdp1;
+    }
+
+    public PanneauMdp getPanneauMdp2() {
+        return panneauMdp2;
+    }
+
+    public PanneauChamp getPanneauIdentifiant() {
+        return panneauIdentifiant;
+    }
+
+    public PanneauInformationsCompte getPanneauInformationsCompte1() {
+        return panneauInformationsCompte1;
+    }
+
+    public PanneauChamp getPanneauNumeroTelephone() {
+        return panneauNumeroTelephone;
     }
 
     /**
@@ -411,6 +438,7 @@ public class PanneauFormInscriptionv2 extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        updateAllJLabelEtat();
         updateJLabelEtat();
         if (nomOK && prenomOK && identifiantOK && courrielOK && numeroTelephoneOK && dateNaissanceOK && mdpOK && mdpConfOK && panneauInformationsCompte1.getNumeroTelephoneDeuxOK() && panneauInformationsCompte1.getSiteWebOK() && panneauInformationsCompte1.getPaysOK() && panneauInformationsCompte1.getCodePostalOK() && panneauInformationsCompte1.getVilleOK() && panneauInformationsCompte1.getNumeroRueOK() && panneauInformationsCompte1.getAdresseOK() && panneauInformationsCompte1.getInfoCompOK() && choisirImage1.getImageOK()) {
             try {
@@ -480,13 +508,6 @@ public class PanneauFormInscriptionv2 extends javax.swing.JPanel {
         panneauNumeroTelephone.getChamp2().setText("0101010101");
         panneauDateNaissance.getChamp2().setText("01/01/2000");
 
-        updateJLabelEtat(panneauNom, 0);
-        updateJLabelEtat(panneauPrenom, 1);
-        updateJLabelEtat(panneauIdentifiant, 2);
-        updateJLabelEtat(panneauCourriel, 3);
-        updateJLabelEtat(panneauNumeroTelephone, 4);
-        updateJLabelEtat(panneauDateNaissance, 5);
-
         panneauInformationsCompte1.getPanneauNumeroTelephoneDeux().getChamp2().setText("0202020202");
         panneauInformationsCompte1.getPanneauSiteWeb().getChamp2().setText("https://www.sio-lurcat.fr");
         panneauInformationsCompte1.getPanneauPays().getChamp2().setText("France");
@@ -494,15 +515,27 @@ public class PanneauFormInscriptionv2 extends javax.swing.JPanel {
         panneauInformationsCompte1.getPanneauNumeroRue().getChamp2().setText("13");
         panneauInformationsCompte1.getPanneauAdresse().getChamp2().setText("rue des champs");
         panneauInformationsCompte1.getPanneauInfoComp().getChamp2().setText("woow");
+        
+        updateAllJLabelEtat();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    public void updateAllJLabelEtat() {
+        updateJLabelEtat(panneauNom, 0);
+        updateJLabelEtat(panneauPrenom, 1);
+        updateJLabelEtat(panneauIdentifiant, 2);
+        updateJLabelEtat(panneauCourriel, 3);
+        updateJLabelEtat(panneauNumeroTelephone, 4);
+        updateJLabelEtat(panneauDateNaissance, 5);
 
         panneauInformationsCompte1.updateJLabelEtat(panneauInformationsCompte1.getPanneauNumeroTelephoneDeux(), 0);
         panneauInformationsCompte1.updateJLabelEtat(panneauInformationsCompte1.getPanneauSiteWeb(), 1);
         panneauInformationsCompte1.updateJLabelEtat(panneauInformationsCompte1.getPanneauPays(), 2);
         panneauInformationsCompte1.updateJLabelEtat(panneauInformationsCompte1.getPanneauCodePostal(), 3);
+        panneauInformationsCompte1.updateJLabelEtat(panneauInformationsCompte1.getPanneauVille(), 4);
         panneauInformationsCompte1.updateJLabelEtat(panneauInformationsCompte1.getPanneauNumeroRue(), 5);
         panneauInformationsCompte1.updateJLabelEtat(panneauInformationsCompte1.getPanneauAdresse(), 6);
         panneauInformationsCompte1.updateJLabelEtat(panneauInformationsCompte1.getPanneauInfoComp(), 7);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.karimandco.photo.ChoisirImage choisirImage1;

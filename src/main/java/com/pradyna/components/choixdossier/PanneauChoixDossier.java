@@ -117,6 +117,18 @@ public class PanneauChoixDossier extends javax.swing.JPanel {
         return jRadioButtonXML;
     }
 
+    public JRadioButton getjRadioButtonCV() {
+        return jRadioButtonCV;
+    }
+
+    public JRadioButton getjRadioButtonCompte() {
+        return jRadioButtonCompte;
+    }
+
+    public JRadioButton getjRadioButtonTout() {
+        return jRadioButtonTout;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

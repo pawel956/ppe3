@@ -14,6 +14,7 @@ import com.pradyna.main.ppe3;
 public class DialogFormInscriptionv2 extends javax.swing.JDialog {
 
     com.pradyna.main.ppe3 objAutreFenetre = null;
+    com.karimandco.admin.PanneauAdministration objAutreFenetreBis = null;
 
     /**
      * Creates new form DialogFormInscription
@@ -24,6 +25,12 @@ public class DialogFormInscriptionv2 extends javax.swing.JDialog {
 
     public DialogFormInscriptionv2(com.pradyna.main.ppe3 fen) {
         this.objAutreFenetre = fen;
+        initComponents();
+        panneauFormInscriptionv2.setFenParentInscription(this);
+    }
+
+    public DialogFormInscriptionv2(com.karimandco.admin.PanneauAdministration fen) {
+        this.objAutreFenetreBis = fen;
         initComponents();
         panneauFormInscriptionv2.setFenParentInscription(this);
     }

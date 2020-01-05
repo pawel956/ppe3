@@ -181,7 +181,6 @@ public class PanneauFormModification extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jLabelEtatMaj = new javax.swing.JLabel();
-        jLabelEtatExportationImportation = new javax.swing.JLabel();
         jButtonImporter = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelInfoImp = new javax.swing.JPanel();
@@ -212,8 +211,6 @@ public class PanneauFormModification extends javax.swing.JPanel {
         });
 
         jLabelEtatMaj.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-
-        jLabelEtatExportationImportation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         jButtonImporter.setText("Importer compte");
         jButtonImporter.addActionListener(new java.awt.event.ActionListener() {
@@ -310,7 +307,7 @@ public class PanneauFormModification extends javax.swing.JPanel {
                 .addContainerGap(107, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Mot de passe", jPanelMdp);
+        jTabbedPane1.addTab("Mots de passe", jPanelMdp);
 
         javax.swing.GroupLayout jPanelPhotoLayout = new javax.swing.GroupLayout(jPanelPhoto);
         jPanelPhoto.setLayout(jPanelPhotoLayout);
@@ -345,21 +342,17 @@ public class PanneauFormModification extends javax.swing.JPanel {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jLabelEtatMaj, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabelEtatExportationImportation, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(93, 93, 93)
-                        .addComponent(jButtonImporter)
-                        .addGap(59, 59, 59)
-                        .addComponent(jLabel2)))
+                .addGap(93, 93, 93)
+                .addComponent(jButtonImporter)
+                .addGap(59, 59, 59)
+                .addComponent(jLabel2)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -372,8 +365,6 @@ public class PanneauFormModification extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonImporter)
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelEtatExportationImportation, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -506,25 +497,35 @@ public class PanneauFormModification extends javax.swing.JPanel {
                                             "Importation du fichier",
                                             JOptionPane.INFORMATION_MESSAGE);
                                 } else {
-                                    jLabelEtatExportationImportation.setForeground(Color.red);
-                                    jLabelEtatExportationImportation.setText("Echec de l'importation, l'id et/ou l'identifiant ne correspondent pas au compte");
+                                    JOptionPane.showMessageDialog(null,
+                                            "Echec de l'importation, l'id et/ou l'identifiant ne correspondent pas au compte",
+                                            "Importation du fichier",
+                                            JOptionPane.ERROR_MESSAGE);
                                 }
                             } else {
-                                jLabelEtatExportationImportation.setForeground(Color.red);
-                                jLabelEtatExportationImportation.setText("Echec de l'importation, il manque l'id et/ou l'identifiant");
+                                JOptionPane.showMessageDialog(null,
+                                        "Echec de l'importation, il manque l'id et/ou l'identifiant",
+                                        "Importation du fichier",
+                                        JOptionPane.ERROR_MESSAGE);
                             }
                         } else {
                             if (compte != null && compte.size() > 1) {
-                                jLabelEtatExportationImportation.setForeground(Color.red);
-                                jLabelEtatExportationImportation.setText("Echec de l'importation, vous tentez d'importer plusieurs comptes à la fois");
+                                JOptionPane.showMessageDialog(null,
+                                        "Echec de l'importation, vous tentez d'importer plusieurs cv à la fois",
+                                        "Importation du fichier",
+                                        JOptionPane.ERROR_MESSAGE);
                             } else {
-                                jLabelEtatExportationImportation.setForeground(Color.red);
-                                jLabelEtatExportationImportation.setText("Echec de l'importation");
+                                JOptionPane.showMessageDialog(null,
+                                        "Echec de l'importation",
+                                        "Importation du fichier",
+                                        JOptionPane.ERROR_MESSAGE);
                             }
                         }
                     } else {
-                        jLabelEtatExportationImportation.setForeground(Color.red);
-                        jLabelEtatExportationImportation.setText("Echec de l'importation, mauvais format du fichier");
+                        JOptionPane.showMessageDialog(null,
+                                "Echec de l'importation, mauvais format du fichier",
+                                "Importation du fichier",
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -560,7 +561,6 @@ public class PanneauFormModification extends javax.swing.JPanel {
     private javax.swing.JButton jButtonImporter;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabelEtatExportationImportation;
     private javax.swing.JLabel jLabelEtatMaj;
     private javax.swing.JLabel jLabelEtatMdp;
     private javax.swing.JPanel jPanelInfoComp;

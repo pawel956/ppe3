@@ -5,13 +5,11 @@
  */
 package com.karimandco.cv;
 
-import com.karimandco.auth.Utilisateur;
 import com.karimandco.bdd.DaoSIO;
 import com.pradyna.components.choixfichier.DialogChoixFichier;
 import com.pradyna.components.importexport.ImportExportCSV;
 import com.pradyna.components.importexport.ImportExportJSON;
 import com.pradyna.components.importexport.ImportExportXML;
-import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
@@ -568,18 +566,18 @@ public class CreationDuCV extends javax.swing.JPanel {
                             infoComp = objXML.getDonneesImporte_InformationsComp();
                         }
                     } else if (formatFichier.equals("csv")) {
-                        ImportExportCSV objCSV = new ImportExportCSV(cheminFichier, "cv");
-                        resultat = objCSV.importerFichier();
-                        if (resultat != null && resultat == true) {
-                            cv = objCSV.getDonneesImporte_Cv();
-                            experiencePro = objCSV.getDonneesImporte_ExperiencePro();
-                            formation = objCSV.getDonneesImporte_Formation();
-                            infoComp = objCSV.getDonneesImporte_InformationsComp();
-                        }
+//                        ImportExportCSV objCSV = new ImportExportCSV(cheminFichier, "cv");
+//                        resultat = objCSV.importerFichier();
+//                        if (resultat != null && resultat == true) {
+//                            cv = objCSV.getDonneesImporte_Cv();
+//                            experiencePro = objCSV.getDonneesImporte_ExperiencePro();
+//                            formation = objCSV.getDonneesImporte_Formation();
+//                            infoComp = objCSV.getDonneesImporte_InformationsComp();
+//                        }
                     }
 
                     if (resultat != null && resultat == true) {
-                        if (cv != null && cv.size() > 0) {
+                        if (cv != null && cv.size() == 1) {
                             setIdCV(null);
 
                             idTabExperiencePro = 1;
@@ -681,16 +679,30 @@ public class CreationDuCV extends javax.swing.JPanel {
                             jButtonValidationCV.setText("Mettre à jour le CV");
                             jLabelTitrePrincipal.setText("Mise à jour de votre cv");
                         } else {
+                            if (cv != null && cv.size() > 1) {
+                                JOptionPane.showMessageDialog(null,
+                                        "Echec de l'importation, vous tentez d'importer plusieurs cv à la fois",
+                                        "Importation du fichier",
+                                        JOptionPane.ERROR_MESSAGE);
+                            } else {
+                                JOptionPane.showMessageDialog(null,
+                                        "Echec de l'importation",
+                                        "Importation du fichier",
+                                        JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                    } else {
+                        if (!formatFichier.equals("csv")) {
                             JOptionPane.showMessageDialog(null,
                                     "Echec de l'importation, mauvais format du fichier",
                                     "Importation du fichier",
                                     JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null,
+                                    "Importation avec fichier .csv impossible pour le CV",
+                                    "Importation du fichier",
+                                    JOptionPane.ERROR_MESSAGE);
                         }
-                    } else {
-                        JOptionPane.showMessageDialog(null,
-                                "Echec de l'importation, mauvais format du fichier",
-                                "Importation du fichier",
-                                JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }

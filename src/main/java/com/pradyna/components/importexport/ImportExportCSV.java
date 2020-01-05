@@ -13,7 +13,9 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -174,56 +176,62 @@ public class ImportExportCSV extends ImportExport {
     public Boolean importerFichier() {
         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
-//        if (this.cheminFichier != null) {
-//            try (Reader reader = Files.newBufferedReader(Paths.get(this.cheminFichier))) {
-//                CSVParser csvParser = new CSVParser(reader, CSVFormat.RFC4180
-//                        .withFirstRecordAsHeader()
-//                        .withIgnoreHeaderCase()
-//                        .withTrim()
-//                );
-//                String[][] lesEtudiants = new String[Utilitaire.countLines(this.cheminFichier) - 1][15];
-//
-//                for (CSVRecord csvRecord : csvParser) {
-//                    if (csvRecord.size() == 15) {
-//                        try {
-//                            Integer compteurLigneTab = Math.toIntExact(csvRecord.getRecordNumber()) - 1;
-//
-//                            lesEtudiants[compteurLigneTab][0] = csvRecord.get("id");
-//                            lesEtudiants[compteurLigneTab][1] = csvRecord.get("identifiant");
-//                            lesEtudiants[compteurLigneTab][2] = csvRecord.get("nom");
-//                            lesEtudiants[compteurLigneTab][3] = csvRecord.get("prenom");
-//                            lesEtudiants[compteurLigneTab][4] = csvRecord.get("dateNaissance");
-//                            lesEtudiants[compteurLigneTab][5] = csvRecord.get("numeroRue");
-//                            lesEtudiants[compteurLigneTab][6] = csvRecord.get("rue");
-//                            lesEtudiants[compteurLigneTab][7] = csvRecord.get("infoComplementaire");
-//                            lesEtudiants[compteurLigneTab][8] = csvRecord.get("codePostal");
-//                            lesEtudiants[compteurLigneTab][9] = csvRecord.get("ville");
-//                            lesEtudiants[compteurLigneTab][10] = csvRecord.get("pays");
-//                            lesEtudiants[compteurLigneTab][11] = csvRecord.get("courriel");
-//                            lesEtudiants[compteurLigneTab][12] = csvRecord.get("numeroTelephone");
-//                            lesEtudiants[compteurLigneTab][13] = csvRecord.get("numeroTelephoneDeux");
-//                            lesEtudiants[compteurLigneTab][14] = csvRecord.get("siteWeb");
-//
-//                        } catch (Exception ex) {
-//                            if (ex.toString().contains("java.lang.IllegalArgumentException")) {
-//                                return null;
-//                            } else {
-//                                Logger.getLogger(ImportExportCSV.class.getName()).log(Level.SEVERE, null, ex);
-//                            }
-//                        }
-//                    } else {
-//                        return null;
-//                    }
-//                }
-//
-//                this.lesDonnees = lesEtudiants;
-//                return true;
-//            } catch (FileNotFoundException ex) {
-//                Logger.getLogger(ImportExportCSV.class.getName()).log(Level.SEVERE, null, ex);
-//            } catch (IOException ex) {
-//                Logger.getLogger(ImportExportCSV.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
+        if (this.cheminFichier != null) {
+            try (Reader reader = Files.newBufferedReader(Paths.get(this.cheminFichier))) {
+                CSVParser csvParser = new CSVParser(reader, CSVFormat.RFC4180
+                        .withFirstRecordAsHeader()
+                        .withIgnoreHeaderCase()
+                        .withTrim()
+                );
+
+                // comptes
+                if (this.donneesAImporter.equals("compte")) {
+                    List<Map<String, Object>> comptes = new ArrayList<Map<String, Object>>();
+
+                    for (CSVRecord csvRecord : csvParser) {
+                        if (csvRecord.size() == 15) {
+                            try {
+                                Map<String, Object> compte = new HashMap<String, Object>(15);
+
+                                compte.put("id", csvRecord.get("id"));
+                                compte.put("identifiant", csvRecord.get("identifiant"));
+                                compte.put("nom", csvRecord.get("nom"));
+                                compte.put("prenom", csvRecord.get("prenom"));
+                                compte.put("dateNaissance", csvRecord.get("dateNaissance"));
+                                compte.put("numeroRue", csvRecord.get("numeroRue"));
+                                compte.put("rue", csvRecord.get("rue"));
+                                compte.put("infoComplementaire", csvRecord.get("infoComplementaire"));
+                                compte.put("codePostal", csvRecord.get("codePostal"));
+                                compte.put("ville", csvRecord.get("ville"));
+                                compte.put("pays", csvRecord.get("pays"));
+                                compte.put("courriel", csvRecord.get("courriel"));
+                                compte.put("numeroTelephoneUn", csvRecord.get("numeroTelephone"));
+                                compte.put("numeroTelephoneDeux", csvRecord.get("numeroTelephoneDeux"));
+                                compte.put("siteWeb", csvRecord.get("siteWeb"));
+
+                                comptes.add(compte);
+                            } catch (Exception ex) {
+                                if (ex.toString().contains("java.lang.IllegalArgumentException")) {
+                                    return null;
+                                } else {
+                                    Logger.getLogger(ImportExportCSV.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                        } else {
+                            return null;
+                        }
+                    }
+
+                    this.DonneesImporte_Utilisateur = comptes;
+                    return true;
+                }
+
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(ImportExportCSV.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ImportExportCSV.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         return null;
     }
 

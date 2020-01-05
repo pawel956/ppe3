@@ -5,7 +5,7 @@
  */
 package com.karimandco.admin;
 
-import com.karimandco.auth.*;
+import com.pradyna.components.connexionv2.PanneauFormConnexionv2;
 
 /**
  *
@@ -25,7 +25,7 @@ public class Connexion extends javax.swing.JDialog {
     public Connexion(com.karimandco.admin.PanneauAdministration fenAdmin) {
         this.objAutreFenetreAdmin = fenAdmin;
         initComponents();
-        panneauFormConnexion1.setFenParentConnexion(this);
+        panneauFormConnexionv21.setFenParentConnexion(this);
     }
 
     /**
@@ -37,22 +37,23 @@ public class Connexion extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panneauFormConnexion1 = new com.karimandco.auth.PanneauFormConnexion();
+        panneauFormConnexionv21 = new com.pradyna.components.connexionv2.PanneauFormConnexionv2();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(panneauFormConnexion1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panneauFormConnexionv21, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(panneauFormConnexion1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panneauFormConnexionv21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -66,12 +67,8 @@ public class Connexion extends javax.swing.JDialog {
         this.objAutreFenetreAdmin = objAutreFenetreAdmin;
     }
 
-    public PanneauFormConnexion getPanneauFormConnexion1() {
-        return panneauFormConnexion1;
-    }
-
-    public void setPanneauFormConnexion1(PanneauFormConnexion panneauFormConnexion1) {
-        this.panneauFormConnexion1 = panneauFormConnexion1;
+    public PanneauFormConnexionv2 getPanneauFormConnexion1() {
+        return panneauFormConnexionv21;
     }
 
     /**
@@ -109,7 +106,7 @@ public class Connexion extends javax.swing.JDialog {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.karimandco.auth.PanneauFormConnexion panneauFormConnexion1;
+    private com.pradyna.components.connexionv2.PanneauFormConnexionv2 panneauFormConnexionv21;
     // End of variables declaration//GEN-END:variables
 
 }

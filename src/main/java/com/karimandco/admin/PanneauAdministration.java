@@ -8,20 +8,23 @@ package com.karimandco.admin;
 import com.karimandco.auth.Utilisateur;
 import com.karimandco.bdd.DaoSIO;
 import com.pradyna.components.Utilitaire;
-//import com.pradyna.components.importexport.ImportExportCSV;
-//import com.pradyna.components.importexport.ImportExportJSON;
-//import com.pradyna.components.importexport.ImportExportXML;
 import com.pradyna.components.choixdossier.DialogChoixDossier;
 import com.pradyna.components.choixfichier.DialogChoixFichier;
+import com.pradyna.components.importexport.ImportExportCSV;
+import com.pradyna.components.importexport.ImportExportJSON;
+import com.pradyna.components.importexport.ImportExportXML;
+import com.pradyna.components.inscriptionv2.DialogFormInscriptionv2;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -32,14 +35,15 @@ import javax.swing.table.TableModel;
  */
 public class PanneauAdministration extends javax.swing.JPanel {
 
-    public String[] entetes = {"id", "identifiant", "nom", "prenom", "dateNaissance", "numeroRue", "rue", "infoComplementaire", "codePostal", "ville", "pays", "courriel", "numeroTelephone", "numeroTelephoneDeux", "siteWeb"};
+    public String[] entetes = {"#", "Identifiant", "Nom", "Prénom", "Courriel", "Numéro de téléphone", "Numéro de téléphone deux"};
     public Object[][] data_test = {{"L1.1", "L1.2", "L1.1", "L1.2", "L1.1", "L1.2", "L1.1", "L1.2", "L1.2"}};
 
     javax.swing.JDialog panneauPereAdministration = null;
 
     private final Helpers helpers;
-    public com.karimandco.admin.Inscription cInscription;
+    public com.karimandco.admin.DialogFormInscription cInscription;
     public com.karimandco.admin.DialogFormModification cDialogFormModification;
+    public com.pradyna.components.inscriptionv2.DialogFormInscriptionv2 cDialogFormInscriptionv2;
     public com.karimandco.admin.Connexion cConnexionAdmin;
     public com.pradyna.components.choixdossier.DialogChoixDossier cChoixDossier;
     public com.pradyna.components.choixfichier.DialogChoixFichier cChoixFichier;
@@ -81,10 +85,6 @@ public class PanneauAdministration extends javax.swing.JPanel {
         jButtonSuppUtilisateur = new javax.swing.JButton();
         jButtonExporter = new javax.swing.JButton();
         jButtonImporter = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextAreaEtatExportationImportation = new javax.swing.JTextArea();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTextAreaEtatVider = new javax.swing.JTextArea();
 
         jButtonSuppToutUtilisateurs.setBackground(new java.awt.Color(0, 0, 0));
         jButtonSuppToutUtilisateurs.setFont(new java.awt.Font("Segoe UI Black", 0, 11)); // NOI18N
@@ -172,7 +172,7 @@ public class PanneauAdministration extends javax.swing.JPanel {
         jButtonExporter.setBackground(new java.awt.Color(0, 0, 0));
         jButtonExporter.setFont(new java.awt.Font("Segoe UI Black", 0, 11)); // NOI18N
         jButtonExporter.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonExporter.setText("Exporter utilisateur(s)");
+        jButtonExporter.setText("Exporter compte(s)");
         jButtonExporter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonExporterActionPerformed(evt);
@@ -182,47 +182,34 @@ public class PanneauAdministration extends javax.swing.JPanel {
         jButtonImporter.setBackground(new java.awt.Color(0, 0, 0));
         jButtonImporter.setFont(new java.awt.Font("Segoe UI Black", 0, 11)); // NOI18N
         jButtonImporter.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonImporter.setText("Importer utilisateur(s)");
+        jButtonImporter.setText("Importer compte(s)");
         jButtonImporter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonImporterActionPerformed(evt);
             }
         });
 
-        jTextAreaEtatExportationImportation.setEditable(false);
-        jTextAreaEtatExportationImportation.setColumns(20);
-        jTextAreaEtatExportationImportation.setRows(5);
-        jScrollPane2.setViewportView(jTextAreaEtatExportationImportation);
-
-        jTextAreaEtatVider.setEditable(false);
-        jTextAreaEtatVider.setColumns(20);
-        jTextAreaEtatVider.setRows(5);
-        jScrollPane3.setViewportView(jTextAreaEtatVider);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1466, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButtonRafraichir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonCreerUtilisateur, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonModifierUtilisateur, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonSuppUtilisateur, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonSuppToutUtilisateurs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2)
-                            .addComponent(jScrollPane3)
-                            .addComponent(jButtonExporter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonImporter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(637, 637, 637)
-                        .addComponent(jLabel1)))
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButtonRafraichir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonCreerUtilisateur, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonModifierUtilisateur, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonSuppUtilisateur, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonSuppToutUtilisateurs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonExporter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonImporter, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(484, 484, 484))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -231,6 +218,7 @@ public class PanneauAdministration extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 546, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonCreerUtilisateur, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -241,15 +229,10 @@ public class PanneauAdministration extends javax.swing.JPanel {
                         .addComponent(jButtonSuppToutUtilisateurs, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButtonRafraichir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(87, 87, 87)
                         .addComponent(jButtonExporter, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonImporter, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 546, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButtonImporter, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -277,9 +260,11 @@ public class PanneauAdministration extends javax.swing.JPanel {
                             Supp = true;
                             //Si la fonction pour tout supprimer est appelée et que Supp est vrai alors création message de confirmation, appelle de la fonction, suppression du contenu de la table
                             if (DaoSIO.getInstance().requeteAction("DELETE FROM utilisateurs WHERE statut = 0") == 1 && Supp == true) {
-                                jTextAreaEtatVider.setForeground(Color.blue);
-                                jTextAreaEtatVider.setText("Les utilisateurs ont été\nsupprimés sauf les administrateurs.");
                                 updateJTableInfo();
+                                JOptionPane.showMessageDialog(null,
+                                        "Les utilisateurs ont été supprimés sauf les administrateurs.",
+                                        "Suppresion de tous les utilisateurs",
+                                        JOptionPane.INFORMATION_MESSAGE);
                             }
 //                            else {
 //                            //Sinon, message d'erreur
@@ -289,8 +274,10 @@ public class PanneauAdministration extends javax.swing.JPanel {
 //                        }
                             //Si Supp est différent de vrai, message d'erreur
                         } else if (Supp != true) {
-                            jTextAreaEtatVider.setForeground(Color.red);
-                            jTextAreaEtatVider.setText("L'opération a été annulée");
+                            JOptionPane.showMessageDialog(null,
+                                    "L'opération a été annulée",
+                                    "Suppresion de tous les utilisateurs",
+                                    JOptionPane.WARNING_MESSAGE);
                         }
                     } else {
                         cConnexionAdmin.getPanneauFormConnexion1().getjLabelEtatConnexion().setForeground(Color.red);
@@ -327,12 +314,14 @@ public class PanneauAdministration extends javax.swing.JPanel {
     private void jButtonRafraichirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRafraichirActionPerformed
         updateJTableInfo();
         //Elaboration du message de succès
-        jTextAreaEtatVider.setForeground(Color.blue);
-        jTextAreaEtatVider.setText("Les données ont été rafraichies");
+        JOptionPane.showMessageDialog(null,
+                "Les données ont été rafraichies",
+                "Rafraichissement des données",
+                JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButtonRafraichirActionPerformed
 
     private void jButtonCreerUtilisateurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreerUtilisateurActionPerformed
-        cInscription = new Inscription(this);
+        cInscription = new DialogFormInscription(this);
         cInscription.getPanneauFormInscriptionv21().getjButton1().setText("Créer un utilisateur");
         cInscription.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
@@ -342,8 +331,10 @@ public class PanneauAdministration extends javax.swing.JPanel {
                 if (cInscription.getPanneauFormInscriptionv21().getInscriptionOK()) {
                     cInscription.setVisible(false);
                     updateJTableInfo();
-                    jTextAreaEtatVider.setForeground(Color.blue);
-                    jTextAreaEtatVider.setText("Inscription réussie");
+                    JOptionPane.showMessageDialog(null,
+                            "Inscription réussie",
+                            "Inscription de l'utilisateur",
+                            JOptionPane.INFORMATION_MESSAGE);
                 }
             }
 
@@ -373,15 +364,17 @@ public class PanneauAdministration extends javax.swing.JPanel {
     private void jButtonModifierUtilisateurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModifierUtilisateurActionPerformed
         //Création d'une variable integer pour la selection d'une ligne dans la table
         int idTable = jTableInfo.getSelectedRowCount();
-
         //Si aucune ligne n'est séléctionnées, ça fait un message d'erreur
         if (idTable < 0) {
-            jTextAreaEtatVider.setForeground(Color.red);
-            jTextAreaEtatVider.setText("Veuillez sélectionner un utilisateur");
+            JOptionPane.showMessageDialog(null,
+                    "Veuillez sélectionner un utilisateur",
+                    "Modification des informations de l'utilisateur",
+                    JOptionPane.ERROR_MESSAGE);
         } else if (idTable == 1) {
+            Integer numLigne = jTableInfo.getSelectedRow();
             TableModel test = jTableInfo.getModel();
             //Raliement des colonnes id, nom et prenom à une valeur pour l'identifier
-            int id = Integer.parseInt(String.valueOf(test.getValueAt(idTable, 0)));
+            int id = Integer.parseInt(String.valueOf(test.getValueAt(numLigne, 0)));
 
             String[][] resultat = requeteSelectAll("SELECT * FROM utilisateurs, villes, pays WHERE utilisateurs.id_ville = villes.id AND villes.id_pays = pays.id AND utilisateurs.id ='" + id + "'");
             //Si le nom de lignes du tableau de la BDD est supérieur à 0 alors application des données de la BDD à notre tableau
@@ -418,6 +411,18 @@ public class PanneauAdministration extends javax.swing.JPanel {
                             cDialogFormModification.dispose();
                             cDialogFormModification.setVisible(false);
                             updateJTableInfo();
+
+                            if (cDialogFormModification.getPanneauFormModification1().updateBDD()) {
+                                JOptionPane.showMessageDialog(null,
+                                        "L'utilisateur a été mis à jour",
+                                        "Modification des informations de l'utilisateur",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            } else {
+                                JOptionPane.showMessageDialog(null,
+                                        "Echec de la mise à jour",
+                                        "Modification des informations de l'utilisateur",
+                                        JOptionPane.ERROR_MESSAGE);
+                            }
                         }
                     }
 
@@ -447,8 +452,10 @@ public class PanneauAdministration extends javax.swing.JPanel {
                 cDialogFormModification.setVisible(true);
             }
         } else {
-            jTextAreaEtatVider.setForeground(Color.red);
-            jTextAreaEtatVider.setText("Vous ne pouvez modifier\nqu'un utilisateur à la fois");
+            JOptionPane.showMessageDialog(null,
+                    "Vous ne pouvez modifier qu'un utilisateur à la fois",
+                    "Modification des informations de l'utilisateur",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButtonModifierUtilisateurActionPerformed
 
@@ -459,8 +466,10 @@ public class PanneauAdministration extends javax.swing.JPanel {
 
         //Si aucune ligne n'est séléctionnées, ça fait un message d'erreur
         if (idTable < 0) {
-            jTextAreaEtatVider.setForeground(Color.red);
-            jTextAreaEtatVider.setText("Veuillez sélectionner un utilisateur");
+            JOptionPane.showMessageDialog(null,
+                    "Veuillez sélectionner un utilisateur",
+                    "Suppresion de l'utilisateur",
+                    JOptionPane.ERROR_MESSAGE);
         } else {
             cConnexionAdmin = new Connexion(this);
             cConnexionAdmin.getPanneauFormConnexion1().getjLabel1().setText("Connexion administration");
@@ -473,57 +482,52 @@ public class PanneauAdministration extends javax.swing.JPanel {
                     Utilisateur.getInstance().chargerInformationsUtilisateur();
                     if (cConnexionAdmin.getPanneauFormConnexion1().getConnexionOK()) {
                         if (Utilisateur.getInstance().getEstConnecte() && Utilisateur.getInstance().getStatut().equals(1)) {
-                            Boolean Supp = false;
                             cConnexionAdmin.setVisible(false);
                             //Creation de la variable boolean Supp étant fausse
                             TableModel test = jTableInfo.getModel();
                             //Raliement des colonnes id, nom et prenom à une valeur pour l'identifier
                             Object id = test.getValueAt(idTable, 0);
-                            Object nom = test.getValueAt(idTable, 4);
-                            Object prenom = test.getValueAt(idTable, 5);
+                            Object nom = test.getValueAt(idTable, 2);
+                            Object prenom = test.getValueAt(idTable, 3);
 
                             //Création d'un message de confirmation pour la suppression de l'utilisateur
                             JOptionPane jop = new JOptionPane();
                             int option = jop.showConfirmDialog(null, "Voulez-vous vraiment supprimer l'utilisateur '" + prenom + " " + nom + "' ?", "Confirmation requise", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
                             if (option == JOptionPane.OK_OPTION) {
-                                int id_admin = (Integer.parseInt(String.valueOf(id)));
-                                //Passage de la variable Supp en vrai
-                                Supp = true;
+                                int id_utilisateur_a_supprimer = (Integer.parseInt(String.valueOf(id)));
+                                ResultSet lesResultats = DaoSIO.getInstance().requeteSelection("SELECT statut FROM utilisateurs WHERE id = '" + id_utilisateur_a_supprimer + "'");
                                 try {
-                                    //Si l'utilisateur à bien été séléctionné et que Supp est vrai, update du tableau et lancement du message de confirmation en vert
-                                    if (helpers.supprimeToutCV(id_admin) && (DaoSIO.getInstance().requeteAction("DELETE FROM utilisateurs WHERE id='" + id_admin + "' AND statut = 0") == 1 && Supp == true)) {
-                                        jTextAreaEtatVider.setForeground(Color.blue);
-                                        jTextAreaEtatVider.setText("L'utilisateur a bien été supprimé");
-                                        updateJTableInfo();
-                                    } else {
-                                        //Sinon, message d'erreur
-                                        jTextAreaEtatVider.setForeground(Color.red);
-                                        jTextAreaEtatVider.setText("Les administrateurs ne peuvent\nêtre supprimés");
+                                    if (lesResultats.next()) {
+                                        if (lesResultats.getInt("statut") == 0) {
+                                            if (helpers.supprimeToutCV(id_utilisateur_a_supprimer) && (DaoSIO.getInstance().requeteAction("DELETE FROM utilisateurs WHERE id='" + id_utilisateur_a_supprimer + "'") == 1)) {
+                                                updateJTableInfo();
+                                                JOptionPane.showMessageDialog(null,
+                                                        "La suppression de l'utilisateur est réussie",
+                                                        "Suppresion de l'utilisateur",
+                                                        JOptionPane.INFORMATION_MESSAGE);
+                                            }
+                                        } else {
+                                            JOptionPane.showMessageDialog(null,
+                                                    "Les administrateurs ne peuvent pas être supprimés",
+                                                    "Suppresion de l'utilisateur",
+                                                    JOptionPane.ERROR_MESSAGE);
+                                        }
                                     }
                                 } catch (SQLException ex) {
                                     Logger.getLogger(PanneauAdministration.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             } else {
-                                //Si Supp est différent de vrai, message d'erreur
-                                if (Supp != true) {
-                                    jTextAreaEtatVider.setForeground(Color.red);
-                                    jTextAreaEtatVider.setText("L'opération a été annulée");
-                                }
-                            }
-                        } else {
-                            cConnexionAdmin.getPanneauFormConnexion1().getjLabelEtatConnexion().setForeground(Color.red);
-                            if (Utilisateur.getInstance().getEstConnecte().equals(false)) {
-                                cConnexionAdmin.getPanneauFormConnexion1().getjLabelEtatConnexion().setText("Identifiant et/ou mot de passe incorrect(s)");
-                            } else if (!Utilisateur.getInstance().getStatut().equals(1)) {
-                                cConnexionAdmin.getPanneauFormConnexion1().getjLabelEtatConnexion().setText("Vous n'êtes pas admin");
+                                JOptionPane.showMessageDialog(null,
+                                        "L'opération a été annulée",
+                                        "Suppresion de l'utilisateur",
+                                        JOptionPane.WARNING_MESSAGE);
                             }
                         }
                     }
                 }
 
                 @Override
-
                 public void mousePressed(MouseEvent e) {
                 }
 
@@ -547,76 +551,61 @@ public class PanneauAdministration extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonSuppUtilisateurActionPerformed
 
     private void jButtonExporterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExporterActionPerformed
-        if (jTableInfo.getSelectedRows().length > 0) {
+        if (jTableInfo.getSelectedRowCount() > 0) {
             cChoixDossier = new DialogChoixDossier(this);
             cChoixDossier.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            cChoixDossier.getPanneauChoixDossier().getjRadioButtonTout().setEnabled(false);
+            cChoixDossier.getPanneauChoixDossier().getjRadioButtonCV().setEnabled(false);
+            cChoixDossier.getPanneauChoixDossier().getjRadioButtonPDF().setEnabled(false);
             cChoixDossier.getPanneauChoixDossier().getjButtonValider().addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    if (cChoixDossier.getPanneauChoixDossier().getChoixDossierOK() && cChoixDossier.getPanneauChoixDossier().getFormatFichier() != null) {
-                        cChoixDossier.setVisible(false);
-                        cChoixDossier.dispose();
 
-                        int[] lignesSelectionnees = jTableInfo.getSelectedRows();
-
-                        Integer compteur = 0;
-                        String[][] lesEtudiants = new String[jTableInfo.getSelectedRows().length][15];
-                        for (int ligneSelectionnee : lignesSelectionnees) {
-                            int id = Integer.parseInt(String.valueOf(jTableInfo.getModel().getValueAt(ligneSelectionnee, 0)));
-                            String[][] lesResultats = requeteSelectAll("SELECT *, villes.nom AS nom_ville, pays.nom AS nom_pays FROM utilisateurs, villes, pays WHERE utilisateurs.id_ville = villes.id AND villes.id_pays = pays.id AND utilisateurs.id = '" + id + "'");
-
-                            lesEtudiants[compteur][0] = lesResultats[0][0];
-                            lesEtudiants[compteur][1] = lesResultats[0][2];
-                            lesEtudiants[compteur][2] = lesResultats[0][4];
-                            lesEtudiants[compteur][3] = lesResultats[0][5];
-
-                            String[] date_split = lesResultats[0][8].split("-");
-                            lesEtudiants[compteur][4] = date_split[2] + "/" + date_split[1] + "/" + date_split[0];
-
-                            lesEtudiants[compteur][5] = lesResultats[0][13];
-                            lesEtudiants[compteur][6] = lesResultats[0][14];
-                            lesEtudiants[compteur][7] = lesResultats[0][15];
-                            lesEtudiants[compteur][8] = lesResultats[0][18];
-                            lesEtudiants[compteur][9] = lesResultats[0][19];
-                            lesEtudiants[compteur][10] = lesResultats[0][21];
-                            lesEtudiants[compteur][11] = lesResultats[0][7];
-                            lesEtudiants[compteur][12] = lesResultats[0][6];
-                            lesEtudiants[compteur][13] = lesResultats[0][10];
-                            lesEtudiants[compteur][14] = lesResultats[0][11];
-
-                            compteur++;
-                        }
-
-                        String cheminFichier = cChoixDossier.getPanneauChoixDossier().getjTextFieldChemin().getText() + "\\export_" + Utilitaire.getDate();
+                    if (cChoixDossier.getPanneauChoixDossier().getChoixDossierOK() && cChoixDossier.getPanneauChoixDossier().getFormatFichier() != null && cChoixDossier.getPanneauChoixDossier().getDonneesAExporter() != null) {
+                        String cheminFichier = cChoixDossier.getPanneauChoixDossier().getjTextFieldChemin().getText() + "\\export_" + Utilisateur.getIdentifiant() + "_" + Utilitaire.getDate();
                         Boolean resultat = null;
 
-//                        if (cChoixDossier.getPanneauChoixDossier().getFormatFichier().equals("JSON")) {
-//                            cheminFichier += ".json";
-//                            ImportExportJSON objJSON = new ImportExportJSON(cheminFichier, lesEtudiants);
-//                            resultat = objJSON.exporterFichier();
-//                        } else if (cChoixDossier.getPanneauChoixDossier().getFormatFichier().equals("XML")) {
-//                            cheminFichier += ".xml";
-//                            ImportExportXML objXML = new ImportExportXML(cheminFichier, lesEtudiants);
-//                            resultat = objXML.exporterFichier();
-//                        } else if (cChoixDossier.getPanneauChoixDossier().getFormatFichier().equals("CSV")) {
-//                            cheminFichier += ".csv";
-//                            ImportExportCSV objCSV = new ImportExportCSV(cheminFichier, lesEtudiants);
-//                            resultat = objCSV.exporterFichier();
-//                        }
+                        List<Integer> id_utilisateurs = new ArrayList<>();
 
-//                        if (resultat) {
-//                            jTextAreaEtatExportationImportation.setForeground(Color.blue);
-//                            jTextAreaEtatExportationImportation.setText("Exportation dans le fichier\n" + cheminFichier + "\nréussie");
-//                        } else {
-//                            jTextAreaEtatExportationImportation.setForeground(Color.red);
-//                            jTextAreaEtatExportationImportation.setText("Echec de l'exportation");
-//                        }
+                        if (cChoixDossier.getPanneauChoixDossier().getDonneesAExporter().equals("Compte")) {
+                            for (int numeroLigne : jTableInfo.getSelectedRows()) {
+                                id_utilisateurs.add(Integer.parseInt(String.valueOf(jTableInfo.getModel().getValueAt(numeroLigne, 0))));
+                            }
+                        }
+
+                        String extensionFichier = cChoixDossier.getPanneauChoixDossier().getFormatFichier();
+
+                        if (extensionFichier.equals("JSON")) {
+                            cheminFichier += ".json";
+                            ImportExportJSON objJSON = new ImportExportJSON(cheminFichier, id_utilisateurs, null);
+                            resultat = objJSON.exporterFichier();
+                        } else if (extensionFichier.equals("XML")) {
+                            ImportExportXML objXML = new ImportExportXML(cheminFichier, id_utilisateurs, null);
+                            resultat = objXML.exporterFichier();
+                        } else if (extensionFichier.equals("CSV")) {
+                            ImportExportCSV objCSV = new ImportExportCSV(cheminFichier, id_utilisateurs, null);
+                            resultat = objCSV.exporterFichier();
+                        }
+
+                        if (resultat != null && resultat) {
+                            cChoixDossier.setVisible(false);
+                            cChoixDossier.dispose();
+
+                            JOptionPane.showMessageDialog(null,
+                                    "Exportation dans le fichier ou les fichiers " + cheminFichier + " réussie",
+                                    "Exportation des données",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null,
+                                    "Echec de l'exportation, veuillez réessayer",
+                                    "Exportation des données",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
                     }
                 }
 
                 @Override
-
                 public void mousePressed(MouseEvent e) {
                     // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
@@ -635,14 +624,15 @@ public class PanneauAdministration extends javax.swing.JPanel {
                 public void mouseExited(MouseEvent e) {
                     // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
-            }
-            );
+            });
             cChoixDossier.setLocationRelativeTo(this);
             cChoixDossier.setModal(true);
             cChoixDossier.setVisible(true);
         } else {
-            jTextAreaEtatExportationImportation.setForeground(Color.red);
-            jTextAreaEtatExportationImportation.setText("Vous devez sélectionner\nau moins un étudiant");
+            JOptionPane.showMessageDialog(null,
+                    "Vous devez sélectionner au moins un compte",
+                    "Exportation des données",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButtonExporterActionPerformed
 
@@ -660,106 +650,185 @@ public class PanneauAdministration extends javax.swing.JPanel {
                     String formatFichier = cChoixFichier.getPanneauChoixFichier().getFormatFichier();
                     String cheminFichier = cChoixFichier.getPanneauChoixFichier().getjTextFieldChemin().getText();
                     Boolean resultat = null;
-                    String[][] etudiants = null;
+                    List<Map<String, Object>> comptes = null;
 
-//                    if (formatFichier.equals("json")) {
-//                        ImportExportJSON objJSON = new ImportExportJSON(cheminFichier, null);
-//                        resultat = objJSON.importerFichier();
-//                        if (resultat != null && resultat == true) {
-//                            etudiants = objJSON.getLesDonnees();
-//                        }
-//                    } else if (formatFichier.equals("xml")) {
-//                        ImportExportXML objXML = new ImportExportXML(cheminFichier, null);
-//                        resultat = objXML.importerFichier();
-//                        if (resultat != null && resultat == true) {
-//                            etudiants = objXML.getLesDonnees();
-//                        }
-//                    } else if (formatFichier.equals("csv")) {
-//                        ImportExportCSV objCSV = new ImportExportCSV(cheminFichier, null);
-//                        resultat = objCSV.importerFichier();
-//                        if (resultat != null && resultat == true) {
-//                            etudiants = objCSV.getLesDonnees();
-//                        }
-//                    }
+                    if (formatFichier.equals("json")) {
+                        ImportExportJSON objJSON = new ImportExportJSON(cheminFichier, "compte");
+                        resultat = objJSON.importerFichier();
+                        if (resultat != null && resultat == true) {
+                            comptes = objJSON.getDonneesImporte_Utilisateur();
+                        }
+                    } else if (formatFichier.equals("xml")) {
+                        ImportExportXML objXML = new ImportExportXML(cheminFichier, "compte");
+                        resultat = objXML.importerFichier();
+                        if (resultat != null && resultat == true) {
+                            comptes = objXML.getDonneesImporte_Utilisateur();
+                        }
+                    } else if (formatFichier.equals("csv")) {
+                        ImportExportCSV objCSV = new ImportExportCSV(cheminFichier, "compte");
+                        resultat = objCSV.importerFichier();
+                        if (resultat != null && resultat == true) {
+                            comptes = objCSV.getDonneesImporte_Utilisateur();
+                        }
+                    }
 
                     if (resultat != null && resultat == true) {
-                        if (etudiants != null && etudiants.length > 0) {
-                            for (String[] etudiant : etudiants) {
-                                cDialogFormModification = new DialogFormModification(PanneauAdministration.this);
-                                cDialogFormModification.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                        if (comptes != null && comptes.size() > 0) {
+                            for (Map compte : comptes) {
 
-                                cDialogFormModification.getPanneauFormModification1().getjLabel1().setText("Importation du compte " + etudiant[1]);
-                                cDialogFormModification.getPanneauFormModification1().getPanneauNom().getChamp2().setText(etudiant[2]);
-                                cDialogFormModification.getPanneauFormModification1().getPanneauPrenom().getChamp2().setText(etudiant[3]);
-                                cDialogFormModification.getPanneauFormModification1().getPanneauIdentifiant().getChamp2().setText(etudiant[1]);
-                                cDialogFormModification.getPanneauFormModification1().getPanneauCourriel().getChamp2().setText(etudiant[11]);
-                                cDialogFormModification.getPanneauFormModification1().getPanneauNumeroTelephone().getChamp2().setText(etudiant[12]);
-                                cDialogFormModification.getPanneauFormModification1().getPanneauDateNaissance().getChamp2().setText(etudiant[4]);
+                                Boolean presentbdd = false;
+                                for (int i = 0; i < jTableInfo.getRowCount(); i++) {
+                                    if (String.valueOf(jTableInfo.getValueAt(i, 1)).equals((String) compte.get("identifiant"))) {
+                                        presentbdd = true;
+                                    }
+                                }
 
-                                cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauNumeroTelephoneDeux().getChamp2().setText(etudiant[13]);
-                                cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauSiteWeb().getChamp2().setText(etudiant[14]);
-                                cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauPays().getChamp2().setText(etudiant[10]);
-                                cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauCodePostal().getChamp2().setText(etudiant[8]);
-                                cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauVille().getChamp2().setText(etudiant[9]);
-                                cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauNumeroRue().getChamp2().setText(etudiant[5]);
-                                cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauAdresse().getChamp2().setText(etudiant[6]);
-                                cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauInfoComp().getChamp2().setText(etudiant[7]);
+                                if (presentbdd) {
+                                    cDialogFormModification = new DialogFormModification(PanneauAdministration.this);
+                                    cDialogFormModification.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-                                cDialogFormModification.getPanneauFormModification1().updateAllJLabelEtat();
+                                    cDialogFormModification.getPanneauFormModification1().getjLabel1().setText("Importation du compte " + (String) compte.get("identifiant"));
+                                    cDialogFormModification.getPanneauFormModification1().getjButton1().setText("Mettre à jour les informations");
 
-                                cDialogFormModification.getPanneauFormModification1().getjButton1().addMouseListener(new MouseListener() {
-                                    @Override
-                                    public void mouseClicked(MouseEvent e) {
+                                    cDialogFormModification.getPanneauFormModification1().getPanneauNom().getChamp2().setText((String) compte.get("nom"));
+                                    cDialogFormModification.getPanneauFormModification1().getPanneauPrenom().getChamp2().setText((String) compte.get("prenom"));
+                                    cDialogFormModification.getPanneauFormModification1().getPanneauIdentifiant().getChamp2().setText((String) compte.get("identifiant"));
+                                    cDialogFormModification.getPanneauFormModification1().getPanneauCourriel().getChamp2().setText((String) compte.get("courriel"));
+                                    cDialogFormModification.getPanneauFormModification1().getPanneauNumeroTelephone().getChamp2().setText((String) compte.get("numeroTelephoneUn"));
+                                    cDialogFormModification.getPanneauFormModification1().getPanneauDateNaissance().getChamp2().setText((String) compte.get("dateNaissance"));
+
+                                    cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauNumeroTelephoneDeux().getChamp2().setText((String) compte.get("numeroTelephoneDeux"));
+                                    cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauSiteWeb().getChamp2().setText((String) compte.get("siteWeb"));
+                                    cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauPays().getChamp2().setText((String) compte.get("pays"));
+                                    cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauCodePostal().getChamp2().setText((String) compte.get("codePostal"));
+                                    cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauVille().getChamp2().setText((String) compte.get("ville"));
+                                    cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauNumeroRue().getChamp2().setText((String) compte.get("numeroRue"));
+                                    cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauAdresse().getChamp2().setText((String) compte.get("rue"));
+                                    cDialogFormModification.getPanneauFormModification1().getPanneauInformationsCompte1().getPanneauInfoComp().getChamp2().setText((String) compte.get("infoComplementaire"));
+
+                                    cDialogFormModification.getPanneauFormModification1().updateAllJLabelEtat();
+
+                                    cDialogFormModification.getPanneauFormModification1().getjButton1().addMouseListener(new MouseListener() {
+                                        @Override
+                                        public void mouseClicked(MouseEvent e) {
 //                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                        if (cDialogFormModification.getPanneauFormModification1().getModificationOK()) {
-                                            Boolean presentbdd = false;
-                                            for (int i = 0; i < jTableInfo.getRowCount(); i++) {
-                                                if (Integer.parseInt(String.valueOf(jTableInfo.getValueAt(i, 0))) == Integer.parseInt(etudiant[0])){
-                                                    presentbdd = true;
+                                            if (cDialogFormModification.getPanneauFormModification1().getModificationOK()) {
+                                                if (cDialogFormModification.getPanneauFormModification1().updateBDD()) {
+                                                    cDialogFormModification.dispose();
+                                                    cDialogFormModification.setVisible(false);
+                                                    updateJTableInfo();
+                                                } else {
+                                                    JOptionPane.showMessageDialog(null,
+                                                            "Echec de l'importation dans la base de données, veuillez réessayer",
+                                                            "Importation du fichier",
+                                                            JOptionPane.ERROR_MESSAGE);
                                                 }
+
                                             }
-                                            
-                                            if(presentbdd){
-                                                // update
-                                            } else {
-                                                // insert into
-                                            }
-                                            
-                                            cDialogFormModification.dispose();
-                                            cDialogFormModification.setVisible(false);
-                                            updateJTableInfo();
                                         }
-                                    }
 
-                                    @Override
-                                    public void mousePressed(MouseEvent e) {
+                                        @Override
+                                        public void mousePressed(MouseEvent e) {
 //                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                    }
+                                        }
 
-                                    @Override
-                                    public void mouseReleased(MouseEvent e) {
+                                        @Override
+                                        public void mouseReleased(MouseEvent e) {
 //                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                    }
+                                        }
 
-                                    @Override
-                                    public void mouseEntered(MouseEvent e) {
+                                        @Override
+                                        public void mouseEntered(MouseEvent e) {
 //                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                    }
+                                        }
 
-                                    @Override
-                                    public void mouseExited(MouseEvent e) {
+                                        @Override
+                                        public void mouseExited(MouseEvent e) {
 //                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                    }
-                                });
+                                        }
+                                    });
 
-                                cDialogFormModification.setLocationRelativeTo(PanneauAdministration.this);
-                                cDialogFormModification.setModal(true);
-                                cDialogFormModification.setVisible(true);
+                                    cDialogFormModification.setLocationRelativeTo(PanneauAdministration.this);
+                                    cDialogFormModification.setModal(true);
+                                    cDialogFormModification.setVisible(true);
+                                } else {
+                                    cDialogFormInscriptionv2 = new DialogFormInscriptionv2(PanneauAdministration.this);
+                                    cDialogFormInscriptionv2.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getjLabel1().setText("Importation du compte " + (String) compte.get("identifiant"));
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getjButton1().setText("Confirmer l'inscription");
+
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getPanneauNom().getChamp2().setText((String) compte.get("nom"));
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getPanneauPrenom().getChamp2().setText((String) compte.get("prenom"));
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getPanneauIdentifiant().getChamp2().setText((String) compte.get("identifiant"));
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getPanneauCourriel().getChamp2().setText((String) compte.get("courriel"));
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getPanneauNumeroTelephone().getChamp2().setText((String) compte.get("numeroTelephoneUn"));
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getPanneauDateNaissance().getChamp2().setText((String) compte.get("dateNaissance"));
+
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getPanneauInformationsCompte1().getPanneauNumeroTelephoneDeux().getChamp2().setText((String) compte.get("numeroTelephoneDeux"));
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getPanneauInformationsCompte1().getPanneauSiteWeb().getChamp2().setText((String) compte.get("siteWeb"));
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getPanneauInformationsCompte1().getPanneauPays().getChamp2().setText((String) compte.get("pays"));
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getPanneauInformationsCompte1().getPanneauCodePostal().getChamp2().setText((String) compte.get("codePostal"));
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getPanneauInformationsCompte1().getPanneauVille().getChamp2().setText((String) compte.get("ville"));
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getPanneauInformationsCompte1().getPanneauNumeroRue().getChamp2().setText((String) compte.get("numeroRue"));
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getPanneauInformationsCompte1().getPanneauAdresse().getChamp2().setText((String) compte.get("rue"));
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getPanneauInformationsCompte1().getPanneauInfoComp().getChamp2().setText((String) compte.get("infoComplementaire"));
+
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().updateAllJLabelEtat();
+
+                                    cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getjButton1().addMouseListener(new MouseListener() {
+                                        @Override
+                                        public void mouseClicked(MouseEvent e) {
+//                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                            if (cDialogFormInscriptionv2.getPanneauFormInscriptionv2().getInscriptionOK()) {
+                                                cDialogFormInscriptionv2.dispose();
+                                                cDialogFormInscriptionv2.setVisible(false);
+                                                updateJTableInfo();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void mousePressed(MouseEvent e) {
+//                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                        }
+
+                                        @Override
+                                        public void mouseReleased(MouseEvent e) {
+//                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                        }
+
+                                        @Override
+                                        public void mouseEntered(MouseEvent e) {
+//                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                        }
+
+                                        @Override
+                                        public void mouseExited(MouseEvent e) {
+//                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                        }
+                                    });
+
+                                    cDialogFormInscriptionv2.setLocationRelativeTo(PanneauAdministration.this);
+                                    cDialogFormInscriptionv2.setModal(true);
+                                    cDialogFormInscriptionv2.setVisible(true);
+                                }
                             }
+
+                            JOptionPane.showMessageDialog(null,
+                                    "Importation du fichier réussi",
+                                    "Importation du fichier",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null,
+                                    "Echec de l'importation",
+                                    "Importation du fichier",
+                                    JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
-                        jTextAreaEtatExportationImportation.setForeground(Color.red);
-                        jTextAreaEtatExportationImportation.setText("Echec de l'importation,\nmauvais format du fichier");
+                        JOptionPane.showMessageDialog(null,
+                                "Echec de l'importation, mauvais format du fichier",
+                                "Importation du fichier",
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -790,31 +859,31 @@ public class PanneauAdministration extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonImporterActionPerformed
 
     public void updateJTableInfo() {
-        //Création d'une variable stockant les colonnes et lignes
-        DefaultTableModel modele = new DefaultTableModel(this.data_test, this.entetes);
-        //Suppression des lignes
-        modele.removeRow(0);
-        //Connexion de la table à la BDD pour selectionner toutes les données
-        String[][] resultat = requeteSelectAll("SELECT * FROM utilisateurs, villes, pays WHERE utilisateurs.id_ville = villes.id AND villes.id_pays = pays.id ORDER BY utilisateurs.id ASC");
-        //Si le nom de lignes du tableau de la BDD est supérieur à 0 alors application des données de la BDD à notre tableau
-        if (resultat.length > 0) {
-            for (String[] ligne : resultat) {
-                String[] date_split = ligne[8].split("-");
-                ligne[8] = date_split[2] + "/" + date_split[1] + "/" + date_split[0];
+        try {
+            //Création d'une variable stockant les colonnes et lignes
+            DefaultTableModel modele = new DefaultTableModel(this.data_test, this.entetes);
+            //Suppression des lignes
+            modele.removeRow(0);
+            //Connexion de la table à la BDD pour selectionner toutes les données
+            ResultSet lesResultats = DaoSIO.getInstance().requeteSelection("SELECT id, identifiant, nom, prenom, courriel, num_telephone, num_telephone_deux FROM utilisateurs ORDER BY utilisateurs.id ASC");
+            while (lesResultats.next()) {
+                String num_telephone_deux;
 
-                modele.addRow(new Object[]{ligne[0], ligne[2], ligne[4], ligne[5], ligne[8], ligne[13], ligne[14], ligne[15], ligne[18], ligne[19], ligne[21], ligne[7], ligne[6], ligne[10], ligne[11]});
+                if (!lesResultats.getString("num_telephone_deux").equals("")) {
+                    num_telephone_deux = lesResultats.getString("num_telephone_deux");
+                } else {
+                    num_telephone_deux = "/";
+                }
+
+                modele.addRow(new Object[]{lesResultats.getString("id"), lesResultats.getString("identifiant"), lesResultats.getString("nom"), lesResultats.getString("prenom"), lesResultats.getString("courriel"), lesResultats.getString("num_telephone"), num_telephone_deux});
             }
+
+            //Envoie des données à notre tableau
+            jTableInfo.setModel(modele);
+        } catch (SQLException ex) {
+            Logger.getLogger(PanneauAdministration.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
-        //Envoie des données à notre tableau
-        jTableInfo.setModel(modele);
-    }
-
-    public JTextArea getjTextAreaEtatVider() {
-        return jTextAreaEtatVider;
-    }
-
-    public void setjTextAreaEtatVider(JTextArea jTextAreaEtatVider) {
-        this.jTextAreaEtatVider = jTextAreaEtatVider;
     }
 
     public String[][] requeteSelectAll(String sql) {
@@ -859,10 +928,6 @@ public class PanneauAdministration extends javax.swing.JPanel {
     private javax.swing.JButton jButtonSuppUtilisateur;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTableInfo;
-    private javax.swing.JTextArea jTextAreaEtatExportationImportation;
-    private javax.swing.JTextArea jTextAreaEtatVider;
     // End of variables declaration//GEN-END:variables
 }

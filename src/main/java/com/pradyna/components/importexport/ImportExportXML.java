@@ -8,6 +8,8 @@ package com.pradyna.components.importexport;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -401,34 +403,44 @@ public class ImportExportXML extends ImportExport {
                 // comptes
                 if (this.donneesAImporter.equals("compte")) {
                     if (doc.getDocumentElement().getNodeName().equals("utilisateurs")) {
-                        NodeList nList = doc.getElementsByTagName("utilisateur");
+                        Element racine = doc.getDocumentElement();
 
-                        if (nList.getLength() > 0) {
-                            String[][] lesEtudiants = new String[nList.getLength()][15];
+                        Boolean continuer = true;
+                        Integer compteur = 1;
 
-                            for (int i = 0; i < nList.getLength(); i++) {
-                                Node nNode = nList.item(i);
+                        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+
+                        while (continuer) {
+                            NodeList nList = racine.getElementsByTagName("utilisateur_" + compteur);
+                            if (nList.getLength() != 1) {
+                                // non ok
+                                continuer = false;
+                            } else if (nList.getLength() == 1) {
+                                // ok
+                                compteur++;
+                                Node nNode = nList.item(0);
 
                                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                                     Element eElement = (Element) nNode;
-                                    // utilisateur_1
+
+                                    Map<String, Object> row = new HashMap<String, Object>(16);
 
                                     if (eElement.getAttribute("id").equals("") || eElement.getElementsByTagName("identifiant").item(0) == null || eElement.getElementsByTagName("nom").item(0) == null || eElement.getElementsByTagName("prenom").item(0) == null || eElement.getElementsByTagName("dateNaissance").item(0) == null || eElement.getElementsByTagName("numeroRue").item(0) == null || eElement.getElementsByTagName("rue").item(0) == null || eElement.getElementsByTagName("infoComplementaire").item(0) == null || eElement.getElementsByTagName("codePostal").item(0) == null || eElement.getElementsByTagName("ville").item(0) == null || eElement.getElementsByTagName("pays").item(0) == null || eElement.getElementsByTagName("courriel").item(0) == null || eElement.getElementsByTagName("siteWeb").item(0) == null) {
                                         return null;
                                     }
 
-                                    lesEtudiants[i][0] = eElement.getAttribute("id");
-                                    lesEtudiants[i][1] = eElement.getElementsByTagName("identifiant").item(0).getTextContent();
-                                    lesEtudiants[i][2] = eElement.getElementsByTagName("nom").item(0).getTextContent();
-                                    lesEtudiants[i][3] = eElement.getElementsByTagName("prenom").item(0).getTextContent();
-                                    lesEtudiants[i][4] = eElement.getElementsByTagName("dateNaissance").item(0).getTextContent();
-                                    lesEtudiants[i][5] = eElement.getElementsByTagName("numeroRue").item(0).getTextContent();
-                                    lesEtudiants[i][6] = eElement.getElementsByTagName("rue").item(0).getTextContent();
-                                    lesEtudiants[i][7] = eElement.getElementsByTagName("infoComplementaire").item(0).getTextContent();
-                                    lesEtudiants[i][8] = eElement.getElementsByTagName("codePostal").item(0).getTextContent();
-                                    lesEtudiants[i][9] = eElement.getElementsByTagName("ville").item(0).getTextContent();
-                                    lesEtudiants[i][10] = eElement.getElementsByTagName("pays").item(0).getTextContent();
-                                    lesEtudiants[i][11] = eElement.getElementsByTagName("courriel").item(0).getTextContent();
+                                    row.put("id", eElement.getAttribute("id"));
+                                    row.put("identifiant", eElement.getElementsByTagName("identifiant").item(0).getTextContent());
+                                    row.put("nom", eElement.getElementsByTagName("nom").item(0).getTextContent());
+                                    row.put("prenom", eElement.getElementsByTagName("prenom").item(0).getTextContent());
+                                    row.put("dateNaissance", eElement.getElementsByTagName("dateNaissance").item(0).getTextContent());
+                                    row.put("numeroRue", eElement.getElementsByTagName("numeroRue").item(0).getTextContent());
+                                    row.put("rue", eElement.getElementsByTagName("rue").item(0).getTextContent());
+                                    row.put("infoComplementaire", eElement.getElementsByTagName("infoComplementaire").item(0).getTextContent());
+                                    row.put("codePostal", eElement.getElementsByTagName("codePostal").item(0).getTextContent());
+                                    row.put("ville", eElement.getElementsByTagName("ville").item(0).getTextContent());
+                                    row.put("pays", eElement.getElementsByTagName("pays").item(0).getTextContent());
+                                    row.put("courriel", eElement.getElementsByTagName("courriel").item(0).getTextContent());
 
                                     Node nNodeBis = eElement.getElementsByTagName("numeroTelephone").item(0);
 
@@ -439,24 +451,277 @@ public class ImportExportXML extends ImportExport {
                                             return null;
                                         }
 
-                                        lesEtudiants[i][12] = eElementBis.getElementsByTagName("un").item(0).getTextContent();
-                                        lesEtudiants[i][13] = eElementBis.getElementsByTagName("deux").item(0).getTextContent();
+                                        row.put("numeroTelephoneUn", eElementBis.getElementsByTagName("un").item(0).getTextContent());
+                                        row.put("numeroTelephoneDeux", eElementBis.getElementsByTagName("deux").item(0).getTextContent());
                                     } else {
                                         return null;
                                     }
 
-                                    lesEtudiants[i][14] = eElement.getElementsByTagName("siteWeb").item(0).getTextContent();
+                                    row.put("siteWeb", eElement.getElementsByTagName("siteWeb").item(0).getTextContent());
+
+                                    rows.add(row);
+                                }
+                            }
+                        }
+
+                        if (!continuer && compteur == 1) {
+                            return null;
+                        }
+
+                        this.DonneesImporte_Utilisateur = rows;
+                        return true;
+                    }
+                }
+
+                // cvs
+                if (this.donneesAImporter.equals("cv")) {
+                    if (doc.getDocumentElement().getNodeName().equals("cvs")) {
+                        Element racine = doc.getDocumentElement();
+
+                        Boolean continuer = true;
+                        Integer compteur = 1;
+
+                        List<Map<String, Object>> rows_cv = new ArrayList<Map<String, Object>>();
+                        List<Map<String, Object>> rows_experiences_pro = new ArrayList<Map<String, Object>>();
+                        List<Map<String, Object>> rows_formations = new ArrayList<Map<String, Object>>();
+                        List<Map<String, Object>> rows_informations_comp = new ArrayList<Map<String, Object>>();
+
+                        while (continuer) {
+                            NodeList nList = racine.getElementsByTagName("cv_" + compteur);
+                            if (nList.getLength() != 1) {
+                                // non ok
+                                continuer = false;
+                            } else if (nList.getLength() == 1) {
+                                // ok
+                                compteur++;
+                                Node nNode = nList.item(0);
+
+                                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                                    Element eElement = (Element) nNode;
+
+                                    Map<String, Object> row_cv = new HashMap<String, Object>(7);
+
+                                    if (eElement.getAttribute("id").equals("") || eElement.getElementsByTagName("id_utilisateur").item(0) == null || eElement.getElementsByTagName("titre").item(0) == null || eElement.getElementsByTagName("description").item(0) == null) {
+                                        return null;
+                                    }
+
+                                    row_cv.put("id", eElement.getAttribute("id"));
+                                    row_cv.put("id_utilisateur", eElement.getElementsByTagName("id_utilisateur").item(0).getTextContent());
+                                    row_cv.put("titre", eElement.getElementsByTagName("titre").item(0).getTextContent());
+                                    row_cv.put("description", eElement.getElementsByTagName("description").item(0).getTextContent());
+
+                                    Node nNodeBis = eElement.getElementsByTagName("maitrise").item(0);
+
+                                    if (nNodeBis != null && nNodeBis.getNodeType() == Node.ELEMENT_NODE) {
+                                        Element eElementBis = (Element) nNodeBis;
+
+                                        if (eElementBis.getElementsByTagName("nom").item(0) == null || eElementBis.getElementsByTagName("valeur").item(0) == null) {
+                                            return null;
+                                        }
+
+                                        row_cv.put("maitriseNom", eElementBis.getElementsByTagName("nom").item(0).getTextContent());
+                                        row_cv.put("maitriseValeur", eElementBis.getElementsByTagName("valeur").item(0).getTextContent());
+                                    } else {
+                                        return null;
+                                    }
+
+                                    // experiences pro
+                                    NodeList nList_experiences_pro = eElement.getElementsByTagName("experiences_pro");
+                                    if (nList_experiences_pro.getLength() == 1) {
+                                        Node nNode_experiences_pro = nList_experiences_pro.item(0);
+
+                                        if (nNode_experiences_pro.getNodeType() == Node.ELEMENT_NODE) {
+                                            Element eElement_experiences_pro = (Element) nNode_experiences_pro;
+
+                                            Boolean continuer_experiences_pro = true;
+                                            Integer compteur_experiences_pro = 1;
+
+                                            while (continuer_experiences_pro) {
+                                                NodeList nList_experience_pro = eElement_experiences_pro.getElementsByTagName("experience_pro_" + compteur_experiences_pro);
+                                                if (nList_experience_pro.getLength() != 1) {
+                                                    // non ok
+                                                    continuer_experiences_pro = false;
+                                                } else if (nList_experience_pro.getLength() == 1) {
+                                                    // ok
+                                                    compteur_experiences_pro++;
+                                                    Node nNode_experience_pro = nList_experience_pro.item(0);
+
+                                                    if (nNode_experience_pro.getNodeType() == Node.ELEMENT_NODE) {
+                                                        Element eElement_experience_pro = (Element) nNode_experience_pro;
+
+                                                        if (eElement_experience_pro.getAttribute("id").equals("") || eElement_experience_pro.getElementsByTagName("entreprise").item(0) == null || eElement_experience_pro.getElementsByTagName("lieu").item(0) == null || eElement_experience_pro.getElementsByTagName("description").item(0) == null) {
+                                                            return null;
+                                                        }
+
+                                                        Map<String, Object> row_experiences_pro = new HashMap<String, Object>(7);
+
+                                                        row_experiences_pro.put("id", eElement_experience_pro.getAttribute("id"));
+                                                        row_experiences_pro.put("entreprise", eElement_experience_pro.getElementsByTagName("entreprise").item(0).getTextContent());
+                                                        row_experiences_pro.put("lieu", eElement_experience_pro.getElementsByTagName("lieu").item(0).getTextContent());
+                                                        row_experiences_pro.put("description", eElement_experience_pro.getElementsByTagName("description").item(0).getTextContent());
+
+                                                        Node nNode_annees = eElement_experience_pro.getElementsByTagName("annees").item(0);
+                                                        if (nNode_annees != null && nNode_annees.getNodeType() == Node.ELEMENT_NODE) {
+                                                            Element eElement_annees = (Element) nNode_annees;
+
+                                                            if (eElement_annees.getElementsByTagName("annee_debut").item(0) == null || eElement_annees.getElementsByTagName("annee_fin").item(0) == null) {
+                                                                return null;
+                                                            }
+
+                                                            row_experiences_pro.put("annee_debut", eElement_annees.getElementsByTagName("annee_debut").item(0).getTextContent());
+                                                            row_experiences_pro.put("annee_fin", eElement_annees.getElementsByTagName("annee_fin").item(0).getTextContent());
+                                                        } else {
+                                                            return null;
+                                                        }
+
+                                                        rows_experiences_pro.add(row_experiences_pro);
+                                                    } else {
+                                                        return null;
+                                                    }
+                                                }
+                                            }
+
+                                            if (!continuer_experiences_pro && compteur_experiences_pro == 1) {
+                                                return null;
+                                            }
+
+                                            this.DonneesImporte_ExperiencePro = rows_experiences_pro;
+                                        }
+                                    } else {
+                                        return null;
+                                    }
+
+                                    // formations
+                                    NodeList nList_formations = eElement.getElementsByTagName("formations");
+                                    if (nList_formations.getLength() == 1) {
+                                        Node nNode_formations = nList_formations.item(0);
+
+                                        if (nNode_formations.getNodeType() == Node.ELEMENT_NODE) {
+                                            Element eElement_formations = (Element) nNode_formations;
+
+                                            Boolean continuer_formations = true;
+                                            Integer compteur_formations = 1;
+
+                                            while (continuer_formations) {
+                                                NodeList nList_formation = eElement_formations.getElementsByTagName("formation_" + compteur_formations);
+                                                if (nList_formation.getLength() != 1) {
+                                                    // non ok
+                                                    continuer_formations = false;
+                                                } else if (nList_formation.getLength() == 1) {
+                                                    // ok
+                                                    compteur_formations++;
+                                                    Node nNode_formation = nList_formation.item(0);
+
+                                                    if (nNode_formation.getNodeType() == Node.ELEMENT_NODE) {
+                                                        Element eElement_formation = (Element) nNode_formation;
+
+                                                        if (eElement_formation.getAttribute("id").equals("") || eElement_formation.getElementsByTagName("nom").item(0) == null || eElement_formation.getElementsByTagName("lieu").item(0) == null || eElement_formation.getElementsByTagName("description").item(0) == null) {
+                                                            return null;
+                                                        }
+
+                                                        Map<String, Object> row_formations = new HashMap<String, Object>(7);
+
+                                                        row_formations.put("id", eElement_formation.getAttribute("id"));
+                                                        row_formations.put("nom", eElement_formation.getElementsByTagName("nom").item(0).getTextContent());
+                                                        row_formations.put("lieu", eElement_formation.getElementsByTagName("lieu").item(0).getTextContent());
+                                                        row_formations.put("description", eElement_formation.getElementsByTagName("description").item(0).getTextContent());
+
+                                                        Node nNode_annees = eElement_formation.getElementsByTagName("annees").item(0);
+                                                        if (nNode_annees != null && nNode_annees.getNodeType() == Node.ELEMENT_NODE) {
+                                                            Element eElement_annees = (Element) nNode_annees;
+
+                                                            if (eElement_annees.getElementsByTagName("annee_debut").item(0) == null || eElement_annees.getElementsByTagName("annee_fin").item(0) == null) {
+                                                                return null;
+                                                            }
+
+                                                            row_formations.put("annee_debut", eElement_annees.getElementsByTagName("annee_debut").item(0).getTextContent());
+                                                            row_formations.put("annee_fin", eElement_annees.getElementsByTagName("annee_fin").item(0).getTextContent());
+                                                        } else {
+                                                            return null;
+                                                        }
+
+                                                        rows_formations.add(row_formations);
+                                                    } else {
+                                                        return null;
+                                                    }
+                                                }
+                                            }
+
+                                            if (!continuer_formations && compteur_formations == 1) {
+                                                return null;
+                                            }
+
+                                            this.DonneesImporte_Formation = rows_formations;
+                                        }
+                                    } else {
+                                        return null;
+                                    }
+
+                                    // informations comp
+                                    NodeList nList_informations_comp = eElement.getElementsByTagName("informations_comp");
+                                    if (nList_informations_comp.getLength() == 1) {
+                                        Node nNode_informations_comp = nList_informations_comp.item(0);
+
+                                        if (nNode_informations_comp.getNodeType() == Node.ELEMENT_NODE) {
+                                            Element eElement_informations_comp = (Element) nNode_informations_comp;
+
+                                            Boolean continuer_informations_comp = true;
+                                            Integer compteur_informations_comp = 1;
+
+                                            while (continuer_informations_comp) {
+                                                NodeList nList_information_comp = eElement_informations_comp.getElementsByTagName("information_comp_" + compteur_informations_comp);
+                                                if (nList_information_comp.getLength() != 1) {
+                                                    // non ok
+                                                    continuer_informations_comp = false;
+                                                } else if (nList_information_comp.getLength() == 1) {
+                                                    // ok
+                                                    compteur_informations_comp++;
+                                                    Node nNode_information_comp = nList_information_comp.item(0);
+
+                                                    if (nNode_information_comp.getNodeType() == Node.ELEMENT_NODE) {
+                                                        Element eElement_information_comp = (Element) nNode_information_comp;
+
+                                                        if (eElement_information_comp.getAttribute("id").equals("") || eElement_information_comp.getElementsByTagName("intitule").item(0) == null || eElement_information_comp.getElementsByTagName("description").item(0) == null) {
+                                                            return null;
+                                                        }
+
+                                                        Map<String, Object> row_informations_comp = new HashMap<String, Object>(4);
+
+                                                        row_informations_comp.put("id", eElement_information_comp.getAttribute("id"));
+                                                        row_informations_comp.put("intitule", eElement_information_comp.getElementsByTagName("intitule").item(0).getTextContent());
+                                                        row_informations_comp.put("description", eElement_information_comp.getElementsByTagName("description").item(0).getTextContent());
+
+                                                        rows_informations_comp.add(row_informations_comp);
+                                                    } else {
+                                                        return null;
+                                                    }
+                                                }
+                                            }
+
+                                            if (!continuer_informations_comp && compteur_informations_comp == 1) {
+                                                return null;
+                                            }
+
+                                            this.DonneesImporte_InformationsComp = rows_informations_comp;
+                                        }
+                                    } else {
+                                        return null;
+                                    }
+
+                                    rows_cv.add(row_cv);
                                 } else {
                                     return null;
                                 }
                             }
 
-//                            this.DonneesImporte = lesEtudiants;
+                            if (!continuer && compteur == 1) {
+                                return null;
+                            }
+
+                            this.DonneesImporte_Cv = rows_cv;
                             return true;
                         }
                     }
-
-                    return null;
                 }
             } catch (ParserConfigurationException | SAXException | IOException ex) {
                 Logger.getLogger(ImportExportXML.class.getName()).log(Level.SEVERE, null, ex);
@@ -465,5 +730,4 @@ public class ImportExportXML extends ImportExport {
 
         return null;
     }
-
 }

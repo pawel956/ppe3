@@ -22,6 +22,7 @@ import java.awt.event.MouseListener;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 /**
@@ -500,8 +501,10 @@ public class PanneauFormModification extends javax.swing.JPanel {
                             if (!((String) compte.get(0).get("id")).equals("") && !((String) compte.get(0).get("identifiant")).equals("")) {
                                 if (Integer.valueOf((String) compte.get(0).get("id")).equals(Utilisateur.getInstance().getId()) && ((String) compte.get(0).get("identifiant")).equals(Utilisateur.getIdentifiant())) {
                                     updateAllJTextField(compte);
-                                    jLabelEtatExportationImportation.setForeground(Color.orange);
-                                    jLabelEtatExportationImportation.setText("Importation réussie, veuillez confirmer pour mettre à jour les informations");
+                                    JOptionPane.showMessageDialog(null,
+                                            "Importation réussie, veuillez confirmer pour mettre à jour les informations",
+                                            "Importation du fichier",
+                                            JOptionPane.INFORMATION_MESSAGE);
                                 } else {
                                     jLabelEtatExportationImportation.setForeground(Color.red);
                                     jLabelEtatExportationImportation.setText("Echec de l'importation, l'id et/ou l'identifiant ne correspondent pas au compte");

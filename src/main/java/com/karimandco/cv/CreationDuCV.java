@@ -5,7 +5,13 @@
  */
 package com.karimandco.cv;
 
+import com.karimandco.auth.Utilisateur;
 import com.karimandco.bdd.DaoSIO;
+import com.pradyna.components.choixfichier.DialogChoixFichier;
+import com.pradyna.components.importexport.ImportExportCSV;
+import com.pradyna.components.importexport.ImportExportJSON;
+import com.pradyna.components.importexport.ImportExportXML;
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
@@ -20,12 +26,15 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 /**
  *
  * @author Sarah
  */
 public class CreationDuCV extends javax.swing.JPanel {
+
+    public com.pradyna.components.choixfichier.DialogChoixFichier cChoixFichier;
 
     public Integer idUtilisateur;
     private Integer idTabFormation = 1;
@@ -120,6 +129,7 @@ public class CreationDuCV extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         jButtonValideInfoComp = new javax.swing.JButton();
         jButtonNouveauCV = new javax.swing.JButton();
+        jButtonImportCV = new javax.swing.JButton();
 
         jLabelTitrePrincipal.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         jLabelTitrePrincipal.setText("Création de votre CV");
@@ -239,6 +249,13 @@ public class CreationDuCV extends javax.swing.JPanel {
             }
         });
 
+        jButtonImportCV.setText("Importer un CV");
+        jButtonImportCV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonImportCVActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -250,7 +267,9 @@ public class CreationDuCV extends javax.swing.JPanel {
                         .addComponent(jComboBoxListeCVs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabelTitrePrincipal)
-                        .addGap(438, 438, 438)
+                        .addGap(355, 355, 355)
+                        .addComponent(jButtonImportCV)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonNouveauCV)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonSupprimeCV))
@@ -330,7 +349,8 @@ public class CreationDuCV extends javax.swing.JPanel {
                     .addComponent(jLabelTitrePrincipal)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButtonSupprimeCV)
-                        .addComponent(jButtonNouveauCV))
+                        .addComponent(jButtonNouveauCV)
+                        .addComponent(jButtonImportCV))
                     .addComponent(jComboBoxListeCVs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addComponent(jLabelTitre)
@@ -509,6 +529,198 @@ public class CreationDuCV extends javax.swing.JPanel {
     private void jButtonNouveauCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNouveauCVActionPerformed
         this.setIdCV(null);
     }//GEN-LAST:event_jButtonNouveauCVActionPerformed
+
+    private void jButtonImportCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImportCVActionPerformed
+        cChoixFichier = new DialogChoixFichier(this);
+        cChoixFichier.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        cChoixFichier.getPanneauChoixFichier().getjButtonValider().addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                if (cChoixFichier.getPanneauChoixFichier().getChoixFichierOK() && cChoixFichier.getPanneauChoixFichier().getFormatFichier() != null) {
+                    cChoixFichier.setVisible(false);
+                    cChoixFichier.dispose();
+
+                    String formatFichier = cChoixFichier.getPanneauChoixFichier().getFormatFichier();
+                    String cheminFichier = cChoixFichier.getPanneauChoixFichier().getjTextFieldChemin().getText();
+                    Boolean resultat = null;
+                    List<Map<String, Object>> cv = null;
+                    List<Map<String, Object>> experiencePro = null;
+                    List<Map<String, Object>> formation = null;
+                    List<Map<String, Object>> infoComp = null;
+
+                    if (formatFichier.equals("json")) {
+                        ImportExportJSON objJSON = new ImportExportJSON(cheminFichier, "cv");
+                        resultat = objJSON.importerFichier();
+                        if (resultat != null && resultat == true) {
+                            cv = objJSON.getDonneesImporte_Cv();
+                            experiencePro = objJSON.getDonneesImporte_ExperiencePro();
+                            formation = objJSON.getDonneesImporte_Formation();
+                            infoComp = objJSON.getDonneesImporte_InformationsComp();
+                        }
+                    } else if (formatFichier.equals("xml")) {
+                        ImportExportXML objXML = new ImportExportXML(cheminFichier, "cv");
+                        resultat = objXML.importerFichier();
+                        if (resultat != null && resultat == true) {
+                            cv = objXML.getDonneesImporte_Cv();
+                            experiencePro = objXML.getDonneesImporte_ExperiencePro();
+                            formation = objXML.getDonneesImporte_Formation();
+                            infoComp = objXML.getDonneesImporte_InformationsComp();
+                        }
+                    } else if (formatFichier.equals("csv")) {
+                        ImportExportCSV objCSV = new ImportExportCSV(cheminFichier, "cv");
+                        resultat = objCSV.importerFichier();
+                        if (resultat != null && resultat == true) {
+                            cv = objCSV.getDonneesImporte_Cv();
+                            experiencePro = objCSV.getDonneesImporte_ExperiencePro();
+                            formation = objCSV.getDonneesImporte_Formation();
+                            infoComp = objCSV.getDonneesImporte_InformationsComp();
+                        }
+                    }
+
+                    if (resultat != null && resultat == true) {
+                        if (cv != null && cv.size() > 0) {
+                            setIdCV(null);
+
+                            idTabExperiencePro = 1;
+                            idTabFormation = 1;
+                            idTabInfoComp = 1;
+
+                            jTextFieldTitre.setText((String) cv.get(0).get("titre"));
+                            jTextAreaDescription.setText((String) cv.get(0).get("description"));
+                            jProgressBar1.setValue(Integer.parseInt((String) cv.get(0).get("maitriseValeur")));
+                            jSpinnerLevelMaitrise1.setValue(Integer.parseInt((String) cv.get(0).get("maitriseValeur")));
+                            jTextFieldMaitrise1.setText((String) cv.get(0).get("maitriseNom"));
+
+                            // Je récupère l'id du cv et je le stocke dans une variable privé de la class
+                            idCV = Integer.valueOf((String) cv.get(0).get("id"));
+
+                            jTabbedPaneFormation.removeAll();
+                            jTabbedPaneExperiencePro.removeAll();
+                            jTabbedPaneInformationsComp.removeAll();
+
+                            if (formation != null && formation.size() > 0) {
+                                for (int i = 0; i < formation.size(); i++) {
+                                    Map<String, Object> formationData;
+                                    formationData = formation.get(i);
+
+                                    Formation formation1 = new Formation();
+
+                                    formation1.setIdFormation(Integer.valueOf((String) formationData.get("id")));
+                                    formation1.setIdCV(Integer.valueOf((String) cv.get(0).get("id")));
+                                    formation1.setIdTab(idTabFormation);
+                                    formation1.getjTextFieldNomFormation().setText((String) formationData.get("nom"));
+                                    formation1.getjTextFieldAdresseFormation().setText((String) formationData.get("lieu"));
+                                    formation1.getjTextAreaDescriptionFormation().setText((String) formationData.get("description"));
+
+                                    String[] date_debut_split = ((String) formationData.get("annee_debut").toString()).split("/");
+                                    String[] date_fin_split = ((String) formationData.get("annee_fin").toString()).split("/");
+
+                                    formation1.getClassDate1().setText(date_debut_split[2] + "-" + date_debut_split[1] + "-" + date_debut_split[0]);
+                                    formation1.getClassDate2().setText(date_fin_split[2] + "-" + date_fin_split[1] + "-" + date_fin_split[0]);
+
+                                    onSupprimeFormation(formation1);
+
+                                    jTabbedPaneFormation.addTab("Formation " + idTabFormation, formation1);
+                                    idTabFormation++;
+                                }
+                            }
+
+                            if (experiencePro != null && experiencePro.size() > 0) {
+                                for (int j = 0; j < experiencePro.size(); j++) {
+                                    Map<String, Object> experienceProData;
+                                    experienceProData = experiencePro.get(j);
+
+                                    ExperiencePro experiencePro1 = new ExperiencePro();
+
+                                    experiencePro1.setIdExperiencePro(Integer.valueOf((String) experienceProData.get("id")));
+                                    experiencePro1.setIdCV(Integer.valueOf((String) cv.get(0).get("id")));
+                                    experiencePro1.setIdTab(idTabExperiencePro);
+                                    experiencePro1.getjTextFieldNomEntpExpPro().setText((String) experienceProData.get("entreprise"));
+                                    experiencePro1.getjTextFieldAdresseExpPro().setText((String) experienceProData.get("lieu"));
+                                    experiencePro1.getjTextAreaDescriptionExpPro().setText((String) experienceProData.get("description"));
+
+                                    String[] date_debut_split = ((String) experienceProData.get("annee_debut").toString()).split("/");
+                                    String[] date_fin_split = ((String) experienceProData.get("annee_fin").toString()).split("/");
+
+                                    experiencePro1.getClassDate1().setText(date_debut_split[2] + "-" + date_debut_split[1] + "-" + date_debut_split[0]);
+                                    experiencePro1.getClassDate2().setText(date_fin_split[2] + "-" + date_fin_split[1] + "-" + date_fin_split[0]);
+
+                                    onSupprimeExperiencePro(experiencePro1);
+
+                                    jTabbedPaneExperiencePro.addTab("Expérience Pro " + idTabExperiencePro, experiencePro1);
+                                    idTabExperiencePro++;
+                                }
+                            }
+
+                            if (infoComp != null && infoComp.size() > 0) {
+                                for (int k = 0; k < infoComp.size(); k++) {
+                                    Map<String, Object> infoCompData;
+                                    infoCompData = infoComp.get(k);
+
+                                    InformationComp informationComp1 = new InformationComp();
+
+                                    informationComp1.setIdInfoComp(Integer.valueOf((String) infoCompData.get("id")));
+                                    informationComp1.setIdCV(Integer.valueOf((String) cv.get(0).get("id")));
+                                    informationComp1.setIdTab(idTabInfoComp);
+                                    informationComp1.getjTextFieldIntitulePartie().setText((String) infoCompData.get("intitule"));
+                                    informationComp1.getjTextAreaDescription().setText((String) infoCompData.get("description"));
+
+                                    onSupprimeInfoComp(informationComp1);
+
+                                    jTabbedPaneInformationsComp.addTab("Informations comp " + idTabInfoComp, informationComp1);
+                                    idTabInfoComp++;
+                                }
+                            }
+
+                            JOptionPane.showMessageDialog(null,
+                                    "Importation réussie, veuillez confirmer pour mettre à jour les informations",
+                                    "Importation du fichier",
+                                    JOptionPane.INFORMATION_MESSAGE);
+
+                            jButtonValidationCV.setText("Mettre à jour le CV");
+                            jLabelTitrePrincipal.setText("Mise à jour de votre cv");
+                        } else {
+                            JOptionPane.showMessageDialog(null,
+                                    "Echec de l'importation, mauvais format du fichier",
+                                    "Importation du fichier",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "Echec de l'importation, mauvais format du fichier",
+                                "Importation du fichier",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+        cChoixFichier.setLocationRelativeTo(this);
+        cChoixFichier.setModal(true);
+        cChoixFichier.setVisible(true);
+
+
+    }//GEN-LAST:event_jButtonImportCVActionPerformed
 
     /**
      * Permet de capturer les évenements touche relaché du champs de saisie
@@ -1173,6 +1385,7 @@ public class CreationDuCV extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonImportCV;
     private javax.swing.JButton jButtonNouveauCV;
     private javax.swing.JButton jButtonSupprimeCV;
     private javax.swing.JButton jButtonValidationCV;

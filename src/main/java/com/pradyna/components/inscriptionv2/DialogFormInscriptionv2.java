@@ -5,7 +5,6 @@
  */
 package com.pradyna.components.inscriptionv2;
 
-import com.pradyna.components.inscriptionv2.PanneauFormInscriptionv2;
 import com.pradyna.main.ppe3;
 
 /**

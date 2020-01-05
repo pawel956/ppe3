@@ -240,11 +240,10 @@ public class ImportExportJSON extends ImportExport {
                 if (JsonElement_racine.isJsonArray()) {
                     JsonArray JsonArray_racine = JsonElement_racine.getAsJsonArray();
 
-                    JsonElement JsonElement_comptes = JsonArray_racine.get(0);
-                    JsonElement JsonElement_cvs = JsonArray_racine.get(1);
-
                     // comptes
                     if (this.donneesAImporter.equals("compte")) {
+                        JsonElement JsonElement_comptes = JsonArray_racine.get(0);
+
                         if (JsonElement_comptes.isJsonArray()) {
                             JsonArray JsonArray_comptes = JsonElement_comptes.getAsJsonArray();
 
@@ -301,7 +300,15 @@ public class ImportExportJSON extends ImportExport {
 
                     // cvs
                     if (this.donneesAImporter.equals("cv")) {
-                        if (JsonElement_cvs.isJsonArray()) {
+                        JsonElement JsonElement_cvs = null;
+
+                        if (JsonArray_racine.size() == 1) {
+                            JsonElement_cvs = JsonArray_racine.get(0);
+                        } else if (JsonArray_racine.size() == 2) {
+                            JsonElement_cvs = JsonArray_racine.get(1);
+                        }
+
+                        if (JsonElement_cvs != null && JsonElement_cvs.isJsonArray()) {
                             JsonArray JsonArray_cvs = JsonElement_cvs.getAsJsonArray();
 
                             List<Map<String, Object>> rows_cv = new ArrayList<Map<String, Object>>();
@@ -315,9 +322,6 @@ public class ImportExportJSON extends ImportExport {
                                 JsonObject JsonObject_cv = JsonElement_cv.getAsJsonObject();
 
                                 Map<String, Object> row_cv = new HashMap<String, Object>(7);
-                                Map<String, Object> row_experiences_pro = new HashMap<String, Object>(7);
-                                Map<String, Object> row_formations = new HashMap<String, Object>(7);
-                                Map<String, Object> row_informations_comp = new HashMap<String, Object>(4);
 
                                 if (JsonObject_cv.get("id") == null || JsonObject_cv.get("id_utilisateur") == null || JsonObject_cv.get("titre") == null || JsonObject_cv.get("description") == null) {
                                     return null;
@@ -354,6 +358,8 @@ public class ImportExportJSON extends ImportExport {
                                             if (JsonObject_cv_experience_pro.get("id") == null || JsonObject_cv_experience_pro.get("entreprise") == null || JsonObject_cv_experience_pro.get("lieu") == null || JsonObject_cv_experience_pro.get("description") == null) {
                                                 return null;
                                             }
+
+                                            Map<String, Object> row_experiences_pro = new HashMap<String, Object>(7);
 
                                             row_experiences_pro.put("id", JsonObject_cv_experience_pro.get("id").getAsString());
                                             row_experiences_pro.put("entreprise", JsonObject_cv_experience_pro.get("entreprise").getAsString());
@@ -396,6 +402,8 @@ public class ImportExportJSON extends ImportExport {
                                                 return null;
                                             }
 
+                                            Map<String, Object> row_formations = new HashMap<String, Object>(7);
+
                                             row_formations.put("id", JsonObject_cv_formation.get("id").getAsString());
                                             row_formations.put("nom", JsonObject_cv_formation.get("nom").getAsString());
                                             row_formations.put("lieu", JsonObject_cv_formation.get("lieu").getAsString());
@@ -433,9 +441,11 @@ public class ImportExportJSON extends ImportExport {
                                         if (JsonElement_cv_informations_comp.isJsonObject()) {
                                             JsonObject JsonObject_cv_information_comp = JsonElement_cv_informations_comp.getAsJsonObject();
 
-                                            if (JsonObject_cv_information_comp.get("id") == null || JsonObject_cv_information_comp.get("nom") == null || JsonObject_cv_information_comp.get("lieu") == null) {
+                                            if (JsonObject_cv_information_comp.get("id") == null || JsonObject_cv_information_comp.get("intitule") == null || JsonObject_cv_information_comp.get("description") == null) {
                                                 return null;
                                             }
+
+                                            Map<String, Object> row_informations_comp = new HashMap<String, Object>(4);
 
                                             row_informations_comp.put("id", JsonObject_cv_information_comp.get("id").getAsString());
                                             row_informations_comp.put("intitule", JsonObject_cv_information_comp.get("intitule").getAsString());

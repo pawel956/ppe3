@@ -23,7 +23,9 @@
                       <Component id="jComboBoxListeCVs" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="jLabelTitrePrincipal" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="438" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="355" max="-2" attributes="0"/>
+                      <Component id="jButtonImportCV" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jButtonNouveauCV" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jButtonSupprimeCV" min="-2" max="-2" attributes="0"/>
@@ -131,6 +133,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jButtonSupprimeCV" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jButtonNouveauCV" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButtonImportCV" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jComboBoxListeCVs" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -400,6 +403,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonNouveauCVActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonImportCV">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Importer un CV"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonImportCVActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

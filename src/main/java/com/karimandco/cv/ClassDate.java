@@ -69,18 +69,18 @@ public class ClassDate extends JTextField {
         } else if (Integer.parseInt(tabDate[1]) == 2 || Integer.parseInt(tabDate[1]) == 4 || Integer.parseInt(tabDate[1]) == 6 || Integer.parseInt(tabDate[1]) == 9 || Integer.parseInt(tabDate[1]) == 11) {
             if (Integer.parseInt(tabDate[2]) > 30) {
                 dateOK = false;
-            }else if(Integer.parseInt(tabDate[1]) == 2){
-            Integer an = Integer.parseInt(tabDate[0]);
-            if( verifAnBisextile(an)== true){
-                if(Integer.parseInt(tabDate[2])>29){
-                    dateOK = false;
+            } else if (Integer.parseInt(tabDate[1]) == 2) {
+                Integer an = Integer.parseInt(tabDate[0]);
+                if (verifAnBisextile(an) == true) {
+                    if (Integer.parseInt(tabDate[2]) > 29) {
+                        dateOK = false;
+                    }
+                } else {
+                    if (Integer.parseInt(tabDate[2]) > 28) {
+                        dateOK = false;
+                    }
                 }
-            }else{
-               if(Integer.parseInt(tabDate[2])>28){
-                    dateOK = false;
-                } 
             }
-        }
         }
         return dateOK;
     }

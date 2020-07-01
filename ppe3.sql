@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : mysql
--- Généré le : mer. 01 juil. 2020 à 18:24
+-- Généré le : mer. 01 juil. 2020 à 18:35
 -- Version du serveur :  5.7.30
 -- Version de PHP : 7.4.6
 
@@ -29,13 +29,13 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `cv` (
   `id` int(11) NOT NULL,
-  `titre` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `signature` text NOT NULL,
-  `nom_maitrise` varchar(255) NOT NULL,
-  `maitrise` text NOT NULL,
+  `titre` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `signature` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nom_maitrise` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `maitrise` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_utilisateur` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -45,13 +45,13 @@ CREATE TABLE `cv` (
 
 CREATE TABLE `experience_pro` (
   `id` int(11) NOT NULL,
-  `entreprise` varchar(255) NOT NULL,
-  `adresse` varchar(255) NOT NULL,
-  `description` text NOT NULL,
+  `entreprise` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `adresse` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `annee_debut` date NOT NULL,
   `annee_fin` date NOT NULL,
   `id_cv` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -61,13 +61,13 @@ CREATE TABLE `experience_pro` (
 
 CREATE TABLE `formation` (
   `id` int(11) NOT NULL,
-  `nom` varchar(255) NOT NULL,
-  `lieu` varchar(255) NOT NULL,
-  `description` text NOT NULL,
+  `nom` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lieu` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `annee_debut` date NOT NULL,
   `annee_fin` date NOT NULL,
   `id_cv` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -77,10 +77,10 @@ CREATE TABLE `formation` (
 
 CREATE TABLE `info_comp` (
   `id` int(11) NOT NULL,
-  `intitule` varchar(255) NOT NULL,
-  `description` text NOT NULL,
+  `intitule` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_cv` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -90,8 +90,8 @@ CREATE TABLE `info_comp` (
 
 CREATE TABLE `pays` (
   `id` int(11) NOT NULL,
-  `nom` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `nom` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -102,21 +102,21 @@ CREATE TABLE `pays` (
 CREATE TABLE `utilisateurs` (
   `id` int(11) NOT NULL,
   `statut` int(1) NOT NULL DEFAULT '0',
-  `identifiant` varchar(255) NOT NULL,
-  `mot_de_passe` varchar(255) NOT NULL,
-  `nom` varchar(255) NOT NULL,
-  `prenom` varchar(255) NOT NULL,
-  `num_telephone` varchar(14) NOT NULL,
-  `courriel` varchar(255) NOT NULL,
+  `identifiant` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mot_de_passe` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nom` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `prenom` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `num_telephone` varchar(14) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `courriel` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date_de_naissance` date NOT NULL,
   `photo` longblob NOT NULL,
-  `num_telephone_deux` varchar(14) DEFAULT NULL,
-  `site_web` varchar(255) DEFAULT NULL,
+  `num_telephone_deux` varchar(14) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `site_web` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `id_ville` int(11) NOT NULL,
   `num_rue` int(11) NOT NULL,
-  `adresse` varchar(255) NOT NULL,
-  `info_complementaire` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `adresse` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `info_complementaire` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -128,8 +128,8 @@ CREATE TABLE `villes` (
   `id` int(11) NOT NULL,
   `id_pays` int(11) NOT NULL,
   `code_postal` int(5) NOT NULL,
-  `nom` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `nom` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Index pour les tables déchargées

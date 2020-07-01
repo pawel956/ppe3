@@ -59,7 +59,7 @@ public class DaoSIO {
     private DaoSIO() {
         try {
             //Définition de l'emplacement de la BDD
-            DaoSIO.chaineConnexion = "jdbc:mysql://" + DaoSIO.nomServeur + "/" + DaoSIO.nomBdd;
+            DaoSIO.chaineConnexion = "jdbc:mysql://" + DaoSIO.nomServeur + "/" + DaoSIO.nomBdd + "?useSSL=false";
 
             //Création de la connexion à la BDD
             this.connexion = (Connection) DriverManager.getConnection(DaoSIO.chaineConnexion, DaoSIO.nomUtilisateur, DaoSIO.motDePasse);
